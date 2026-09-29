@@ -1,0 +1,24 @@
+<section id="sample" class="v2-sample v2-section" aria-labelledby="sample-title">
+  <div class="v2-shell">
+    <div class="v2-section-heading grid gap-6 md:grid-cols-2 md:items-end"><div><p class="v2-label">02 / INSPECT THE EVIDENCE</p><h2 id="sample-title" class="v2-title">ONE COMPANY.<br>THREE LENSES.</h2></div><p class="v2-intro">A strong business and an attractive price are two different things. Work through the sample. See what each lens reveals.</p></div>
+    <div class="v2-workbench" data-tabs data-vertical-tabs>
+      <div class="v2-workbench-top flex flex-wrap items-center justify-between gap-3"><div class="flex items-center gap-4"><b>{{ site.data.sample.ticker }}</b><strong>{{ site.data.sample.company }}</strong></div><p>Illustrative sample · not live data</p></div>
+      <div class="v2-workbench-body">
+        <div class="v2-tabs" data-tablist aria-label="Explore the illustrative Apple report"><button type="button" id="tab-business" data-tab="business"><span aria-hidden="true">01</span> Business quality</button><button type="button" id="tab-valuation" data-tab="valuation"><span aria-hidden="true">02</span> Valuation</button><button type="button" id="tab-context" data-tab="context"><span aria-hidden="true">03</span> Context</button></div>
+        <div class="v2-panel grid gap-8 lg:grid-cols-2" id="panel-business" data-panel="business">
+          <div><p class="v2-label">BUSINESS QUALITY / {{ site.data.sample.quality }}</p><h3>KNOW WHAT<br>YOU’RE BUYING.</h3><p>Look past the ticker. Examine growth, profitability and financial strength to understand the business behind the stock.</p><p class="v2-takeaway">In this example, strong profitability and cash scores sit alongside a more moderate growth score.</p></div>
+          <div class="v2-scorecard"><div class="v2-label flex justify-between gap-2"><span>UNDER THE SURFACE</span><span>/ 100</span></div>{% for score in site.data.sample.scores %}<div class="v2-score-row"><span>{{ score.name }}</span><div class="v2-score-track" aria-hidden="true"><span style="width: {{ score.value }}%"></span></div><strong>{{ score.value }}</strong></div>{% endfor %}<p class="v2-small">Illustrative quantitative scores.<br>Not a recommendation.</p></div>
+        </div>
+        <div class="v2-panel grid gap-8 lg:grid-cols-2" id="panel-valuation" data-panel="valuation">
+          <div><p class="v2-label">VALUATION / {{ site.data.sample.valuation }}</p><h3>GREAT COMPANY.<br>AT WHAT PRICE?</h3><p>Quality tells you about the company. Valuation asks what you’re paying for it. Use valuation zones alongside the business assessment, not in place of it.</p><p class="v2-takeaway">This example pairs {{ site.data.sample.quality }} business quality with a {{ site.data.sample.valuation }} valuation. One doesn’t cancel out the other.</p></div>
+          <div class="v2-scorecard"><p class="v2-label">VALUATION SCORE</p><p class="v2-valuation-number">{{ site.data.sample.scores[3].value }}<span>/ 100</span></p><div class="v2-score-track" aria-hidden="true"><span style="width: {{ site.data.sample.scores[3].value }}%"></span></div><div class="v2-pair flex justify-between gap-4"><p>Business quality<strong>{{ site.data.sample.quality }}</strong></p><p>Valuation<strong>{{ site.data.sample.valuation }}</strong></p></div><p class="v2-small">No current share price or fair-value target is shown.</p></div>
+        </div>
+        <div class="v2-panel grid gap-8 lg:grid-cols-2" id="panel-context" data-panel="context">
+          <div><p class="v2-label">CONTEXT / LOOK WIDER</p><h3>THE SCORE IS<br>NOT THE STORY.</h3><p>Consider price action, analyst consensus and targets, news price drivers, and market themes. Then record what you believe—and what would change your mind.</p><p class="v2-takeaway">Keep a watchlist and a bullish, neutral or bearish thesis journal. Your reasoning deserves a record.</p></div>
+          <div class="v2-scorecard"><p class="v2-label">YOUR RESEARCH LENS</p><ul class="v2-context-list"><li><strong>Price & expectations</strong><span>Price action · analyst consensus & targets</span></li><li><strong>Drivers & market themes</strong><span>News price drivers · wider context</span></li><li><strong>Your thesis, in your words</strong><span>Watchlist · thesis journal</span></li></ul><p class="v2-small">Capability illustration. No current news or analyst data shown.</p></div>
+        </div>
+      </div>
+      <div class="v2-workbench-bottom flex flex-col gap-4 md:flex-row md:items-center md:justify-between"><p>Quantitative ratings. Automatically generated summaries.<br>Your judgment comes next.</p><a class="v2-link" href="{{ site.data.site.sample }}">Explore the Apple report <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </div>
+</section>

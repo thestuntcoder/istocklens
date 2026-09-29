@@ -1,5 +1,8 @@
 @import "tailwindcss" source(none);
+@import "./version-2.css";
 @source "../index.html";
+@source "../version-1/index.html";
+@source "../version-2/index.html";
 @source "../_layouts";
 @source "../_includes";
 

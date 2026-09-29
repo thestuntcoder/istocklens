@@ -1,0 +1,16 @@
+<figure class="v2-brief" aria-labelledby="brief-caption">
+  <div class="v2-brief-top flex items-center justify-between gap-3"><span>RESEARCH BRIEF / {{ site.data.sample.ticker }}</span><span class="v2-indicator" aria-hidden="true"></span></div>
+  <div class="v2-brief-company flex items-center justify-between gap-4"><div><p class="v2-label">BUSINESS UNDER THE LENS</p><h2>{{ site.data.sample.company }}</h2><p>{{ site.data.sample.ticker }} <span aria-hidden="true">/</span> Company research</p></div><span class="v2-company-code" aria-hidden="true">A<span>↗</span></span></div>
+  <div class="v2-verdicts grid grid-cols-2"><div><span>BUSINESS QUALITY</span><strong>{{ site.data.sample.quality }} <i aria-hidden="true">↗</i></strong></div><div><span>VALUATION</span><strong>{{ site.data.sample.valuation }} <i aria-hidden="true">≠</i></strong></div></div>
+  <div class="v2-brief-chart">
+    <div class="flex justify-between gap-3"><p class="v2-label">TWO DIFFERENT QUESTIONS</p><span class="v2-label">SCORE / 100</span></div>
+    <div class="v2-chart-grid">
+      {% for score in site.data.sample.scores %}{% if score.name == 'Profitability' or score.name == 'Valuation' %}<div class="v2-chart-row"><div class="flex justify-between"><span>{{ score.name }}</span><strong>{{ score.value }}</strong></div><div class="v2-chart-track"><span style="width: {{ score.value }}%" class="{% if score.name == 'Valuation' %}v2-chart-secondary{% endif %}"></span></div></div>{% endif %}{% endfor %}
+      <div class="v2-chart-axis flex justify-between"><span>0</span><span>50</span><span>100</span></div>
+    </div>
+    <p class="v2-chart-note">Static score comparison. Not a price history.</p>
+  </div>
+  <div class="v2-watchpoints"><p class="v2-label">WATCHPOINTS / ASK BEFORE YOU ACT</p><p><span aria-hidden="true">↳</span> What supports the business quality?</p><p><span aria-hidden="true">↳</span> What expectations are built into the price?</p></div>
+  <div class="v2-brief-insight">GREAT BUSINESS <span>≠</span> GREAT PRICE</div>
+  <figcaption id="brief-caption">Illustrative sample · not live data</figcaption>
+</figure>

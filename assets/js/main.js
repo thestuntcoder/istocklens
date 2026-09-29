@@ -1,5 +1,5 @@
 (() => {
-  const toggle = document.querySelector('.menu-toggle');
+  const toggle = document.querySelector('.menu-toggle, .v2-menu-toggle');
   const navigation = document.querySelector('#site-navigation');
   if (toggle && navigation) {
     document.documentElement.classList.add('nav-enhanced');
@@ -17,16 +17,23 @@
       if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') setMenu(false, true);
     });
     document.addEventListener('click', (event) => {
-      if (!event.target.closest('.site-header')) setMenu(false);
+      if (!event.target.closest('.site-header, .v2-header')) setMenu(false);
     });
     matchMedia('(min-width: 1100px)').addEventListener('change', () => setMenu(false));
   }
 
   document.querySelectorAll('[data-tabs]').forEach((workbench) => {
-    const tablist = workbench.querySelector('.tabs');
+    const tablist = workbench.querySelector('.tabs, [data-tablist]');
     const tabs = [...workbench.querySelectorAll('[data-tab]')];
     const panels = [...workbench.querySelectorAll('[data-panel]')];
     tablist.setAttribute('role', 'tablist');
+    // V2 uses a vertical rail on desktop and horizontal tabs on phones.
+    if (workbench.hasAttribute('data-vertical-tabs')) {
+      const desktop = matchMedia('(min-width: 768px)');
+      const orient = () => tablist.setAttribute('aria-orientation', desktop.matches ? 'vertical' : 'horizontal');
+      desktop.addEventListener('change', orient);
+      orient();
+    }
     tabs.forEach((tab) => {
       tab.setAttribute('role', 'tab');
       tab.setAttribute('aria-controls', `panel-${tab.dataset.tab}`);
@@ -48,8 +55,9 @@
       tab.addEventListener('click', () => select(index));
       tab.addEventListener('keydown', (event) => {
         let next;
-        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-        else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+        const vertical = tablist.getAttribute('aria-orientation') === 'vertical';
+        if (event.key === 'ArrowRight' || (vertical && event.key === 'ArrowDown')) next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft' || (vertical && event.key === 'ArrowUp')) next = (index - 1 + tabs.length) % tabs.length;
         else if (event.key === 'Home') next = 0;
         else if (event.key === 'End') next = tabs.length - 1;
         else return;

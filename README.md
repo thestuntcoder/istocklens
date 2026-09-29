@@ -1,6 +1,16 @@
 # iStockLens landing page
 
-A responsive editorial landing page built with **Jekyll 4.4** and **locally compiled Tailwind 4**. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
+Two responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
+
+## Compare the designs
+
+At the preferred preview address (use the actual URL printed by the launcher):
+
+- **Original:** http://127.0.0.1:4001/ — unchanged original landing page.
+- **Version 1:** http://127.0.0.1:4001/version-1/ — the same original content and appearance.
+- **Version 2:** http://127.0.0.1:4001/version-2/ — navy/cobalt, condensed bold typography, research-terminal artwork, ruled grids and a rectangular money-back stamp.
+
+Only V2 has the discreet version switcher. Both variants share verified data, compiled CSS and progressive-enhancement JavaScript; V2 styling is isolated with `body.version-2` or `v2-` component classes.
 
 ## Prerequisites and install
 
@@ -47,7 +57,13 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 
 ## Content map
 
-- `index.html`: page argument, section layout and interactive sample panels.
+- `index.html` and `version-1/index.html`: original routes, both including `_includes/version-1-content.html`.
+- `_includes/version-1-content.html`: unchanged original page argument, section layout and interactive sample panels.
+- `version-2/index.html`: alternative page composition, benefits, process, guarantee and FAQs.
+- `_layouts/version-2.html`: V2 metadata and shell; loads the same local CSS/JS as V1.
+- `_includes/version-2/`: dedicated header, footer, research-brief artwork and interactive sample.
+- `_styles/version-2.css`: isolated blue tokens, typography, components and responsive rules, imported by `_styles/main.css`.
+- `assets/images/version-2-{favicon,social}.svg` and `version-2-social.png`: original V2 branding and 1200 × 630 social artwork.
 - `_data/site.yml`: verified external destinations and canonical guarantee sentence.
 - `_data/sample.yml`: explicitly illustrative Apple/AAPL sample and scores.
 - `_data/faqs.yml`: FAQ copy.
@@ -58,7 +74,7 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 - `_config.yml`: title, description, canonical host and build exclusions.
 - `docs/ui-design-spec.md` and `.agents/product-marketing.md`: source-of-truth design and factual constraints.
 
-Fonts: Manrope variable 400–800 and Instrument Serif italic, Latin WOFF2 subsets from Google Fonts, self-hosted under `assets/fonts/` with their SIL Open Font License files. System fonts provide fallbacks. Social artwork is original SVG; its PNG counterpart is used in metadata for crawler compatibility.
+Fonts: Manrope variable 400–800 and Instrument Serif italic, Latin WOFF2 subsets from Google Fonts, self-hosted under `assets/fonts/` with their SIL Open Font License files. V2 adds **Barlow Condensed 800**, also a local Latin WOFF2 with `BarlowCondensed-OFL.txt`, and uses Manrope for supporting copy (no serif on V2). System fonts provide fallbacks. Each variant has original SVG social artwork with a PNG counterpart for crawler compatibility; the V2 SVG embeds its licensed heading font for standalone rendering.
 
 ## Verify
 
@@ -69,17 +85,17 @@ npm run build                   # production CSS and site only
 npm run test:workflow            # port validation / selection / non-destructive conflict tests
 npm run test:browser             # browser regression tests against an existing production build
 bundle exec jekyll doctor
-SCREENSHOTS=1 npm run check      # also saves nine full-page views + three hero captures in tmp/screenshots/
+SCREENSHOTS=1 npm run check      # original captures in tmp/screenshots/; six V2 full-page + hero pairs in tmp/version-2/
 ```
 
-Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. Chromium checks local assets/anchors, canonical metadata, CTA destinations, excluded artifacts, keyboard navigation/tabs/FAQs, reduced motion, no-JS fallback, responsive report bounds at 320–1920px, and axe WCAG A/AA rules across sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
+Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **28 Chromium tests** retain the original 15 checks and add 13 variant checks: root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Axe WCAG A/AA checks cover both designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
 
 If the bundled browser cannot be installed, use an installed Chrome with `CHROME_CHANNEL=chrome npm run check`. Failures are explicit, not silently skipped; ignored `test-results/` contains screenshots and traces (`npx playwright show-trace <trace.zip>`). If no browser tooling is available, run build, workflow tests and doctor separately, then use the following manual fallback at the printed dev URL and record that limitation:
 
 
 - The header menu opens on mobile, closes with Escape (returning focus) and closes after following a link.
 - The hero’s “Explore a sample” scrolls to the report below the sticky header.
-- Each report tab shows different content. ArrowLeft/Right wrap; Home/End select first/last. Exactly one tab is selected and in the tab order.
+- Each report tab shows different content. ArrowLeft/Right wrap; Home/End select first/last. V2’s vertical rail at 768px and above also uses ArrowUp/Down; its ARIA orientation updates on resize. Exactly one tab is selected and in the tab order.
 - Each native FAQ expands using click, Enter or Space. With JavaScript disabled, navigation and all three report panels remain available.
 - Primary CTAs lead to `https://istocklens.com/download`; other external links use only the verified paths in `_data/site.yml`.
 - At 320px, mobile, tablet and desktop widths there is no horizontal page overflow; sample labels remain visible. Reduced motion disables smooth scrolling and decorative transitions.

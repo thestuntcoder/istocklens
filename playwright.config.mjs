@@ -7,6 +7,8 @@ export default defineConfig({
   workers: 2,
   timeout: 30000,
   reporter: 'list',
+  // Route-to-route references are captured fresh, not committed golden images.
+  snapshotPathTemplate: '{testDir}/../tmp/browser-comparisons/{testFilePath}/{arg}{ext}',
   use: {
     browserName: 'chromium',
     channel: process.env.CHROME_CHANNEL || 'chromium',

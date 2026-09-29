@@ -1,0 +1,11 @@
+<header class="v2-header">
+  <div class="v2-shell v2-header-inner flex items-center justify-between gap-6">
+    <a class="v2-brand inline-flex items-center gap-2.5" href="{{ '/version-2/' | relative_url }}" aria-label="iStockLens home">{% include logo.html %}</a>
+    <button class="v2-menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" hidden>Menu <span aria-hidden="true">☰</span></button>
+    <nav id="site-navigation" class="v2-navigation" aria-label="Main navigation">
+      <div class="v2-nav-links flex gap-6"><a href="#research">The research</a><a href="#how-it-works">How it works</a><a href="#guarantee">Our guarantee</a></div>
+      <div class="v2-switch" aria-label="Page versions"><a href="{{ '/version-1/' | relative_url }}">Version 1</a><span aria-hidden="true">/</span><a href="{{ '/version-2/' | relative_url }}" aria-current="page">Version 2</a></div>
+      <a class="v2-button v2-button-small" href="{{ site.data.site.download }}">Start researching {% include arrow.html %}</a>
+    </nav>
+  </div>
+</header>

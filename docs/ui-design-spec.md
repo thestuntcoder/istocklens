@@ -31,3 +31,17 @@ Fresh identity is a design proposal, not a claim of historical branding. Audienc
 
 ## Guidance used
 ui-workflow manual protocol (condensed implementation-ready spec); product-marketing and copywriting skills for factual context and clear benefit-led argument. No new external skills installed. Direct response uses clear reasons and accurately bounded risk reversal, not imitation, hype, fabricated proof or investment promises.
+
+## Version 2 — blue research brief (additive alternative)
+
+The original field-journal direction above remains authoritative for `/` and `/version-1/`. Their shared content, original component rules and artwork are unchanged. `/version-2/` deliberately changes the visual argument, not the product facts.
+
+- **Tone:** premium, assertive, athletic/technical and independent; strength without gender restrictions, trading hype or promises of returns.
+- **Tokens:** midnight navy `#08162d`, dark blue `#112847`, electric cobalt `#285cff`, ice-blue `#86b6ff`, cool white `#f2f5fa`; steel supporting surfaces and ruled grids. Corners 0–2px, no glows, serif, green or animation loops.
+- **Type:** self-hosted SIL-OFL Barlow Condensed 800 for muscular headings/counters; Manrope for reading; system monospace for small technical labels. Desktop hero reaches 128px, explicitly composed as “YOUR MONEY. / YOUR CALL. / KNOW WHY.” with the third line ice-blue. Narrow screens retain three unclipped lines.
+- **Composition:** fullbleed navy hero, right-only technical grid, aligned AAPL research brief with dark/light panes, static 90-vs-49 score comparison and blue insight footer. A full-width mechanism rail leads into cool-white benefits, a dark research workbench, steel three-step process, cobalt/navy rectangular 100% stamp, native FAQs and dark legal footer. No reused tilted-paper artwork or arched seal.
+- **Content:** shared `_data` supplies company identity, quality/valuation labels, all five scores, FAQs, verified external links and the exact guarantee: “If you don’t use the app, you get 100% of your money back.” The scope remains app subscription non-use only. Both samples visibly say “Illustrative sample · not live data”; no prices, targets, news or testimonials are invented.
+- **Interaction:** V2-only comparison links mark Version 2 current. Desktop sample tabs form a vertical rail (Up/Down as well as Left/Right); phones use a horizontal row. Home/End, roving focus, visible focus and content-changing panels work in both layouts. No JS leaves all three panels and navigation available. Sticky anchors, scrollable mobile menu, skip link, six native FAQs and reduced-motion support are retained.
+- **Isolation:** `_layouts/version-2.html`, `_includes/version-2/` and `_styles/version-2.css`; CSS is body-scoped or fully `v2-` prefixed, with only additive Tailwind source/import declarations in the original stylesheet. V2 has its own canonical, navy theme color, favicon and local SVG/PNG social artwork. Original routes receive no switcher or metadata redesign.
+
+Validation includes screenshots at 320/390/768/1024/1440/1920px, root/V1 preservation checks against commit `1ddc598`, keyboard/no-JS/reduced-motion checks and axe WCAG A/AA. See `development-verification.md` for actual results and limitations. No new dependencies or external skills were installed for this variant.
