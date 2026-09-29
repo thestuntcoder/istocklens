@@ -1,0 +1,15 @@
+company: Apple Inc.
+ticker: AAPL
+quality: Strong
+valuation: Pricey
+scores:
+  - name: Growth
+    value: 65
+  - name: Profitability
+    value: 90
+  - name: Cash
+    value: 90
+  - name: Valuation
+    value: 49
+  - name: Stability
+    value: 75

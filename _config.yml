@@ -1,0 +1,34 @@
+title: iStockLens
+description: "Understand the business, question the price, and examine the risks. iStockLens brings structure to your stock research. The decision stays yours."
+url: "https://istocklens.com"
+baseurl: ""
+lang: en
+timezone: UTC
+markdown: kramdown
+strict_front_matter: true
+permalink: pretty
+exclude:
+  - _site
+  - node_modules
+  - vendor
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - package-lock.json
+  - README.md
+  - docs
+  - tests
+  - scripts
+  - tmp
+  - .agents
+  - .pi
+  - .bundle
+  - .jekyll-cache
+  - .jekyll-metadata
+  - .sass-cache
+  - .gitignore
+  - _styles
+  - test-results
+  - playwright-report
+  - "*.log"
+  - "*.pid"

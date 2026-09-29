@@ -1,0 +1,18 @@
+<div class="hero-art" role="group" aria-label="Illustrative Apple report, not live data. Strong business quality, Pricey valuation.">
+  <div class="art-orbit art-orbit-one" aria-hidden="true"></div><div class="art-orbit art-orbit-two" aria-hidden="true"></div>
+  <span class="art-label">A CLEARER VIEW OF YOUR NEXT IDEA</span>
+  <div class="hero-report">
+    <div class="report-topline flex items-center justify-between"><span class="flex items-center gap-1.5"><span class="status-dot"></span> THE RESEARCH BRIEF</span><span>01 / AAPL</span></div>
+    <div class="flex items-center gap-3.5 mt-6"><span class="company-monogram" aria-hidden="true">A<span>↗</span></span><div><h2 class="company-name">{{ site.data.sample.company }}</h2><p class="text-xs muted mt-1">{{ site.data.sample.ticker }} <span class="mx-1">/</span> Company snapshot</p></div><span class="report-star ml-auto" aria-hidden="true">✳</span></div>
+    <div class="report-verdicts grid grid-cols-2 gap-3 mt-6"><div><span class="report-caption">Business quality</span><strong class="verdict-strong">{{ site.data.sample.quality }} <span aria-hidden="true">↗</span></strong></div><div><span class="report-caption">Valuation</span><strong class="verdict-pricey">{{ site.data.sample.valuation }} <span aria-hidden="true">↗</span></strong></div></div>
+    <div class="report-chart mt-5">
+      <div class="flex justify-between items-center"><span class="report-caption">The quality–value gap</span><span class="chart-key">Conceptual view</span></div>
+      <svg viewBox="0 0 360 102" class="w-full mt-3" role="img" aria-label="Conceptual illustration: a strong business can still be expensive. Not a historical price chart."><path d="M0 22h360M0 51h360M0 80h360" stroke="#dfe4d8" stroke-width="1" stroke-dasharray="3 5"/><path d="M0 86 25 78 45 81 66 60 88 64 110 47 130 58 154 33 178 38 199 21 220 33 241 19 267 26 285 10 310 16 336 6 357 12" fill="none" stroke="#294e38" stroke-width="2.5" stroke-linejoin="round"/><path d="M0 83 40 79 80 72 120 76 160 68 200 72 240 61 280 65 320 57 357 61" fill="none" stroke="#86936a" stroke-width="1.5" stroke-dasharray="5 5"/><circle cx="357" cy="12" r="4" fill="#294e38"/></svg>
+    </div>
+    <div class="mini-scores grid grid-cols-3 gap-4 mt-4">{% for score in site.data.sample.scores limit:3 %}<div><div class="flex justify-between gap-2"><span>{{ score.name }}</span><b>{{ score.value }}</b></div><div class="mini-track mt-2"><span style="width: {{ score.value }}%"></span></div></div>{% endfor %}</div>
+    <p class="report-disclaimer">Illustrative report · not live data</p>
+  </div>
+  <div class="quality-tag"><span aria-hidden="true">↗</span><span>Quality <span class="not-equal">≠</span> value</span></div>
+  <div class="art-note"><span class="note-line" aria-hidden="true"></span><p>Great business.<br><em>But at what price?</em></p></div>
+  <span class="art-bottom">LESS NOISE. MORE PERSPECTIVE.</span>
+</div>

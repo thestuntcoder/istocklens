@@ -1,0 +1,15 @@
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.bundle/
+vendor/
+node_modules/
+assets/css/main.css
+*.log
+*.pid
+.DS_Store
+.pi/
+tmp/
+test-results/
+playwright-report/
