@@ -35,11 +35,11 @@ body.version-2 .v2-button:hover{background:#1744cc;color:#fff}
 .v2-link{display:inline-flex;align-items:center;gap:20px;font-size:13px;font-weight:800;min-height:44px}
 .v2-link:hover{text-decoration:underline;text-underline-offset:6px}
 .v2-hero{background:var(--v2-navy);color:var(--v2-white)}
-.v2-hero-grid{grid-template-columns:1.08fr 1fr;gap:64px;padding-block:64px 60px}
+.v2-hero-grid{grid-template-columns:1.08fr 1fr;align-items:start;gap:64px;padding-block:48px}
 .v2-hero-copy{min-width:0;position:relative;z-index:1}
 .v2-hero-eyebrow{display:flex;align-items:center;gap:12px;color:#c0cde0}
 .v2-hero-eyebrow>span{color:var(--v2-ice);font-size:10px}
-.v2-hero h1{font-family:'Barlow Condensed','Arial Narrow',Impact,sans-serif;font-size:clamp(88px,8.9vw,128px);font-weight:800;line-height:.91;letter-spacing:-1.8px;margin:27px 0 26px}
+.v2-hero h1{font-family:'Barlow Condensed','Arial Narrow',Impact,sans-serif;font-size:clamp(88px,8.2vw,116px);font-weight:800;line-height:.91;letter-spacing:-1.8px;margin:27px 0 26px}
 .v2-hero h1>span{display:block;white-space:nowrap}
 .v2-hero h1>span:last-child{color:var(--v2-ice)}
 .v2-hero-description{max-width:490px;color:#c0cde0;font-size:15px;line-height:1.85}

@@ -8,11 +8,11 @@ Verified 2026-09-29 in `/Users/dj/Sites/istocklanding`.
 - **Version 1:** http://127.0.0.1:4001/version-1/
 - **Version 2:** http://127.0.0.1:4001/version-2/
 - **HTTP:** 4001; **LiveReload:** 35730, both bound to 127.0.0.1.
-- **Launcher PID:** 4652; **Tailwind watcher:** 4654; **Jekyll:** 4657.
+- **Launcher PID:** 16557; **Tailwind watcher:** 16563; **Jekyll:** 16566.
 - Started detached with `nohup node scripts/dev.mjs > tmp/dev/launcher.log 2>&1 < /dev/null &` (the same launcher used by `npm run dev`).
 - Combined startup/output log: `tmp/dev/launcher.log`.
-- Per-process logs and runtime state: `tmp/dev/2026-09-29T19-42-24.241Z-4652/` (`css-build.log`, `css.log`, `jekyll.log`, `state.json`).
-- Stop: confirm `ps -p 4652 -o pid,command`, then `kill -TERM 4652`. Wait two seconds for its owned children to exit. Restart with `npm run dev`; read the newly printed URL and ports.
+- Per-process logs and runtime state: `tmp/dev/2026-09-29T19-49-04.402Z-16557/` (`css-build.log`, `css.log`, `jekyll.log`, `state.json`).
+- Stop: confirm `ps -p 16557 -o pid,command`, then `kill -TERM 16557`. Wait two seconds for its owned children to exit. Restart with `npm run dev`; read the newly printed URL and ports.
 - All three routes and the LiveReload script returned **200**. Chromium completed the websocket handshake on **35730**, observed source/CSS reloads without manual refresh, and captured the restored V2 preview.
 - Other project's Ruby PID **77749**, listening on **4000 / 35729**, was unchanged before/after every lifecycle test. No signal was sent to it.
 
@@ -73,7 +73,9 @@ Not performed: manual screen-reader certification, physical-device checks, or Fi
 
 The initial V2 `SCREENSHOTS=1 npm run check` passed after stopping the identity-verified original launcher **98323** with SIGTERM and confirming both owned children exited: production Tailwind/Jekyll build, **3 workflow tests**, **28 Chromium tests** (the existing 15 plus 13 variant/preservation tests), and Jekyll doctor **“Everything looks fine.”** Browser suite: **19.5 seconds**. No dependencies, browsers or launchers were replaced.
 
-The final recheck, after font-license whitespace cleanup and an identity-verified SIGTERM shutdown of launcher **92669**, passed the build, all **3 workflow tests** and **26 browser tests**; both axe tests reached their 30-second runtime limit (no accessibility assertion failure). The two unchanged tests then passed with **zero axe violations** using `npx playwright test --grep 'automated accessibility checks|V2 axe WCAG' --workers=1`: **2 passed in 9.5 seconds**. Jekyll doctor separately passed. Thus every browser test passed across the final run and focused recheck; the last full command itself exited nonzero on those timeouts. Logs: ignored `tmp/version-2/final-check.log`, `accessibility-recheck.log` and `doctor-recheck.log`.
+An earlier recheck, after font-license whitespace cleanup and an identity-verified SIGTERM shutdown of launcher **92669**, passed the build, all **3 workflow tests** and **26 browser tests**; both axe tests reached their 30-second runtime limit (no accessibility assertion failure). The two unchanged tests then passed with **zero axe violations** using `npx playwright test --grep 'automated accessibility checks|V2 axe WCAG' --workers=1`: **2 passed in 9.5 seconds**. Jekyll doctor separately passed. Thus every browser test passed across the final run and focused recheck; the last full command itself exited nonzero on those timeouts. Logs: ignored `tmp/version-2/final-check.log`, `accessibility-recheck.log` and `doctor-recheck.log`.
+
+Final visual review tightened desktop hero spacing and set its headline maximum to **116px**, retaining the strong type while keeping both the CTA and guarantee visible at 800px-high desktop viewports. Added regression coverage at 1280/1440/1512/1920px. The complete final production build, **3 workflow tests**, **29 browser tests** (run serially), both axe suites and Jekyll doctor all passed in one run. Browser tests took 29.7 seconds; log: ignored `tmp/version-2/parent-final-check.log`. The managed preview was restarted afterward and all routes plus LiveReload returned HTTP 200.
 
 ### Original-route preservation
 
@@ -83,7 +85,7 @@ The final recheck, after font-license whitespace cleanup and an identity-verifie
 
 ### V2 visual, factual and accessibility review
 
-- Inspected fresh screenshots at all six requested widths, plus full-page desktop/small-desktop rhythm, narrow-phone sample details and the local social image. Three-line Barlow Condensed 800 headline reaches **128px** at 1440/1920px. No overflow, clipping, distorted research brief, serif or original green palette was found.
+- Inspected fresh screenshots at all six requested widths, plus full-page desktop/small-desktop rhythm, narrow-phone sample details and the local social image. Three-line Barlow Condensed 800 headline reaches **116px** at 1440/1920px after final first-fold refinement. No overflow, clipping, distorted research brief, serif or original green palette was found.
 - Reviewed the distinct navy terminal artwork, blue/steel section alternation, oversized process counters and rectangular guarantee stamp. Headings, sample scores and supporting type remain live HTML/CSS, not a bitmap.
 - All three tabs change content; correct shared scores **65 / 90 / 90 / 49 / 75**, **Strong** quality and **Pricey** valuation are present. Tested vertical Up/Down, phone Left/Right, Home/End, wraparound, roving tabindex, panel focus and responsive ARIA orientation. Checked skip link, visible focus, menu Escape/outside-click/link closure, short-screen scrolling, sticky anchors and comparison-link navigation.
 - **Zero axe WCAG A/AA violations** across desktop/phone tab states and expanded FAQs/menu. All six native FAQs work using Enter/Space. No-JS leaves all panels/navigation usable at six widths; reduced motion disables smooth scrolling/transitions. Manual visual review was supplemented by contrast calculations: white/cobalt **5.17:1**, muted/cool-white **5.75:1**, muted/steel **5.20:1**, cobalt focus/cool-white **4.73:1**, secondary chart bar/cool-white **3.15:1**. Log: `tmp/version-2/contrast-check.log`.

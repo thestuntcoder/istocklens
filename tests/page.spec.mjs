@@ -402,6 +402,19 @@ for (const width of [320, 390, 768, 1024, 1440, 1920]) {
   });
 }
 
+test('V2 keeps its research CTA and guarantee above the desktop fold', async ({ page }) => {
+  for (const width of [1280, 1440, 1512, 1920]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto(v2);
+    await page.evaluate(() => document.fonts.ready);
+    for (const selector of ['.v2-hero-actions', '.v2-hero-guarantee']) {
+      const box = await page.locator(selector).boundingBox();
+      expect(box.y, `${selector} top at ${width}px`).toBeGreaterThan(0);
+      expect(box.y + box.height, `${selector} below fold at ${width}px`).toBeLessThanOrEqual(800);
+    }
+  }
+});
+
 test('V2 axe WCAG AA across sample, expanded FAQ and menu states', async ({ page }) => {
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 1000 });

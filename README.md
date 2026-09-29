@@ -88,7 +88,7 @@ bundle exec jekyll doctor
 SCREENSHOTS=1 npm run check      # original captures in tmp/screenshots/; six V2 full-page + hero pairs in tmp/version-2/
 ```
 
-Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **28 Chromium tests** retain the original 15 checks and add 13 variant checks: root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Axe WCAG A/AA checks cover both designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
+Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **29 Chromium tests** retain the original 15 checks and add 14 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Axe WCAG A/AA checks cover both designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
 
 If the bundled browser cannot be installed, use an installed Chrome with `CHROME_CHANNEL=chrome npm run check`. Failures are explicit, not silently skipped; ignored `test-results/` contains screenshots and traces (`npx playwright show-trace <trace.zip>`). If no browser tooling is available, run build, workflow tests and doctor separately, then use the following manual fallback at the printed dev URL and record that limitation:
 
@@ -120,6 +120,9 @@ Actual verification and handoff details are recorded in `docs/development-verifi
 
 - `0498046` — Build the branded Jekyll landing page.
 - `72ad19c` — Harden development workflow and polish the running experience.
-- Final review — refine customer-facing guarantee wording, recheck the page in Chrome and complete documentation.
+- `08684a3` — Refine guarantee copy and finalize the original preview.
+- `1ddc598` — Preserve the original landing page as version-1.
+- `c25d7d8` — Implement and validate the distinct version-2 landing page.
+- Final V2 polish — keep the research CTA and guarantee above the desktop fold, with regression coverage.
 
 See `git log --oneline` for the full commit history and `docs/development-verification.md` for verification details.
