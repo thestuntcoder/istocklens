@@ -6,11 +6,11 @@ Verified 2026-09-29 in `/Users/dj/Sites/istocklanding`.
 
 - **URL:** http://127.0.0.1:4001/
 - **HTTP:** 4001; **LiveReload:** 35730, both bound to 127.0.0.1.
-- **Launcher PID:** 90951; **Tailwind watcher:** 90954; **Jekyll:** 90957.
+- **Launcher PID:** 98323; **Tailwind watcher:** 98326; **Jekyll:** 98329.
 - Started detached with `nohup node scripts/dev.mjs > tmp/dev/launcher.log 2>&1 < /dev/null &` (the same launcher used by `npm run dev`).
 - Combined startup/output log: `tmp/dev/launcher.log`.
-- Per-process logs and runtime state: `tmp/dev/2026-09-29T15-17-07.886Z-90951/` (`css-build.log`, `css.log`, `jekyll.log`, `state.json`).
-- Stop: confirm `ps -p 90951 -o pid,command`, then `kill -TERM 90951`. Wait two seconds for its owned children to exit. Restart with `npm run dev`; read the newly printed URL and ports.
+- Per-process logs and runtime state: `tmp/dev/2026-09-29T15-21-52.314Z-98323/` (`css-build.log`, `css.log`, `jekyll.log`, `state.json`).
+- Stop: confirm `ps -p 98323 -o pid,command`, then `kill -TERM 98323`. Wait two seconds for its owned children to exit. Restart with `npm run dev`; read the newly printed URL and ports.
 - Final HTTP request returned **200**. Chromium loaded the live preview and captured fresh report/sample/menu views.
 - Other project's Ruby PID **77749**, listening on **4000 / 35729**, was unchanged before/after every lifecycle test. No signal was sent to it.
 
@@ -57,9 +57,12 @@ Ignored screenshots: `tmp/screenshots/page-{width}.png`, `hero-{320,390,1440}.pn
 
 Not performed: manual screen-reader certification, physical-device checks, or Firefox/Safari browser matrices. README includes concrete manual checks when browser tooling is unavailable.
 
-## Commit and commercial caveats
+## Final review and commercial caveats
 
-- Existing commit: **`0498046` — Build the branded Jekyll landing page**. At this worker's handoff it is the only existing commit; scaffold and page work are combined there.
-- The workflow/polish changes are ready for a parent-owned tested-polish commit. Worker instructions explicitly prohibit `git commit`; no new commit ID or three-milestone history is claimed. The parent must reconcile the requested three milestones.
-- Guarantee remains exactly **100% money back if customer does not use the app.** Non-use of the subscription is the sole stated condition. The owner must confirm eligibility and refund process before production; no deadlines, extra conditions or procedure were invented.
+- Milestones committed: **`0498046` — Build the branded Jekyll landing page** and **`72ad19c` — Harden development workflow and polish the running experience**. See Git history for the final copy/documentation review commit.
+- Reviewed the running page in the connected Chrome profile, including the full desktop composition and the sample anchor/tab interaction. Reviewed the 390px mobile capture and full-page desktop rhythm.
+- Polished the customer-facing guarantee to: **If you don’t use the app, you get 100% of your money back.** This preserves the supplied non-use condition without adding deadlines, eligibility restrictions, refund procedures or investment protection.
+- Re-ran `npm run check` after the final copy edits: production build, 3 workflow tests, all 15 browser tests, automated accessibility checks and Jekyll doctor passed. Final log: ignored `tmp/parent-final-check.log`.
+- Restarted the managed development server after verification; both the preview and LiveReload script returned HTTP 200. The runtime details above reflect this final restart.
+- Owner confirmation of guarantee eligibility and the refund process is still required before production.
 - Pricing remains unverified; `/pricing` is known to return 404. No pricing links, prices, plans, discounts or trial periods were added.

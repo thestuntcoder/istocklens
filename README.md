@@ -100,8 +100,10 @@ Actual verification and handoff details are recorded in `docs/development-verifi
 - The sample is not live data or investment advice. Scores and labels must remain illustrative. Hero chart is conceptual, not a price history. Quantitative ratings and automatic summaries do not replace independent verification.
 - No fabricated testimonials, ratings, customer counts, avatars, endorsements or investment outcomes are included.
 
-## Milestones / handoff
+## Milestones
 
-`0498046` — Build the branded Jekyll landing page (existing parent-created milestone, including scaffold and completed-page work).
+- `0498046` — Build the branded Jekyll landing page.
+- `72ad19c` — Harden development workflow and polish the running experience.
+- Final review — refine customer-facing guarantee wording, recheck the page in Chrome and complete documentation.
 
-This workflow/polish change is ready for the parent Pi Long Task session to commit. Worker instructions prohibit direct commits. At worker verification, Git contained only the existing milestone above; the requested three-commit history must be reconciled by the parent rather than claimed here. See `docs/development-verification.md` for runtime and test handoff.
+See `git log --oneline` for the full commit history and `docs/development-verification.md` for verification details.

@@ -33,7 +33,7 @@ test('local assets, anchors, metadata, factual CTAs and production exclusions', 
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', 'https://istocklens.com/');
-  await expect(page.locator('body')).toContainText('100% money back if customer does not use the app.');
+  await expect(page.locator('.guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
   const refs = await page.locator('[href], [src]').evaluateAll(elements => elements.flatMap(e => ['href', 'src'].filter(a => e.hasAttribute(a)).map(a => e.getAttribute(a))));
   const verified = new Set(['/download', '/stocks', '/stocks/aapl', '/today', '/privacy', '/terms']);
   for (const ref of new Set(refs)) {
