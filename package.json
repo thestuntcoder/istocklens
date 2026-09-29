@@ -7,13 +7,16 @@
     "css:build": "tailwindcss -i ./_styles/main.css -o ./assets/css/main.css --minify",
     "css:watch": "tailwindcss -i ./_styles/main.css -o ./assets/css/main.css --watch",
     "build": "npm run css:build && JEKYLL_ENV=production bundle exec jekyll build",
-    "serve": "bundle exec jekyll serve --host 127.0.0.1 --port 4001 --livereload --livereload-port 35730",
-    "dev": "npm run css:build && concurrently -k -n css,jekyll \"npm run css:watch\" \"npm run serve\""
+    "serve": "npm run dev",
+    "dev": "node scripts/dev.mjs",
+    "test:workflow": "node --test tests/workflow.test.mjs",
+    "test:browser": "playwright test",
+    "check": "npm run build && npm run test:workflow && npm run test:browser && bundle exec jekyll doctor"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
     "@playwright/test": "1.55.1",
     "@tailwindcss/cli": "4.1.13",
-    "concurrently": "9.2.4",
     "tailwindcss": "4.1.13"
   }
 }

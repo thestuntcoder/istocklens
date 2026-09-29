@@ -20,11 +20,30 @@ npm run build
 npm run dev
 ```
 
-Default address: **http://127.0.0.1:4001/**; LiveReload websocket: **35730**. Check availability first with `lsof -nP -iTCP:4001 -iTCP:35730 -sTCP:LISTEN`. Never stop unrelated processes. Ports 4000 and 35729 belong to another project and are intentionally not used.
+The launcher prefers **http://127.0.0.1:4001/** and LiveReload websocket **35730**. It reserves available sockets before building; if either preferred port is occupied, it independently selects the next free port. **Read the printed URL**, rather than assuming a port. Ports **4000 and 35729 are always reserved for the other project**; even explicit overrides cannot use them. Nothing kills a port’s current owner.
 
-`npm run dev` first builds CSS, then runs the Tailwind watcher and Jekyll LiveReload together. `npm run css:watch` and `npm run serve` can also be run in separate terminals. For different free ports, build CSS, start its watcher, then run `bundle exec jekyll serve --host 127.0.0.1 --port PORT --livereload --livereload-port LRPORT`.
+```sh
+PORT=4010 LIVERELOAD_PORT=35740 npm run dev
+# Optional bind address (default local-only): HOST=127.0.0.1
+```
 
-Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts and style sources are excluded from Jekyll output. Tailwind watches explicit source paths only. Compiled CSS is intentionally included in Jekyll, so a CSS rebuild triggers browser reload without a build loop.
+`PORT`, `LIVERELOAD_PORT` and `HOST` are optional environment overrides. Explicit ports must be distinct integers from 1–65535; conflicts, invalid values and protected ports fail with clear errors, rather than silently moving. Unspecified ports still auto-select. Binding a non-loopback `HOST` exposes the preview to that interface; this is a development server, not a production host. A rare bind race after reservation fails safely without stopping the new owner.
+
+`npm run dev` builds CSS first, then coordinates Tailwind `--watch=always` and Jekyll `serve --livereload`. `npm run serve` is an alias for the same managed workflow. **Ctrl+C** stops the launcher and both owned child process groups; if either watcher fails, the other is stopped too. For low-level CSS-only work, `npm run css:watch` remains available.
+
+Each invocation prints its launcher PID and log directory: `tmp/dev/<timestamp>-<pid>/`. It contains `css-build.log`, `css.log`, `jekyll.log`, and a live `state.json` recording URL, ports and child PIDs. State is removed on clean shutdown; logs are retained and Git-ignored. To detach for an agent handoff:
+
+```sh
+mkdir -p tmp/dev
+nohup node scripts/dev.mjs > tmp/dev/launcher.log 2>&1 < /dev/null &
+# Read tmp/dev/launcher.log for the actual URL and launcher PID.
+# Stop that exact launcher (not a process discovered merely by port):
+kill -TERM <launcher-pid>
+```
+
+Use `ps -p <launcher-pid> -o pid,command` to confirm identity before stopping a stale handoff. Allow two seconds for cleanup, then restart with `npm run dev`. Do not use `kill -9` for normal shutdown. `lsof -nP -iTCP:<http-port> -iTCP:<lr-port> -sTCP:LISTEN` verifies sockets without disrupting them.
+
+Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwright configuration/reports and style sources are excluded from Jekyll output and watching. Tailwind scans explicit template paths only. Compiled CSS is intentionally included in Jekyll, so a CSS rebuild triggers browser reload without a loop. **Do not run production builds/checks concurrently with dev**: both write `_site/` and the CSS output. Stop, check, then restart. Configuration and launcher changes also require a restart.
 
 ## Content map
 
@@ -44,11 +63,19 @@ Fonts: Manrope variable 400–800 and Instrument Serif italic, Latin WOFF2 subse
 ## Verify
 
 ```sh
-npm run build
+npx playwright install chromium  # one-time browser installation for automated checks
+npm run check                   # production build + workflow tests + browser tests + Jekyll doctor
+npm run build                   # production CSS and site only
+npm run test:workflow            # port validation / selection / non-destructive conflict tests
+npm run test:browser             # browser regression tests against an existing production build
 bundle exec jekyll doctor
+SCREENSHOTS=1 npm run check      # also saves nine full-page views + three hero captures in tmp/screenshots/
 ```
 
-For manual verification, serve `_site/` locally on a free port and check:
+Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. Chromium checks local assets/anchors, canonical metadata, CTA destinations, excluded artifacts, keyboard navigation/tabs/FAQs, reduced motion, no-JS fallback, responsive report bounds at 320–1920px, and axe WCAG A/AA rules across sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
+
+If the bundled browser cannot be installed, use an installed Chrome with `CHROME_CHANNEL=chrome npm run check`. Failures are explicit, not silently skipped; ignored `test-results/` contains screenshots and traces (`npx playwright show-trace <trace.zip>`). If no browser tooling is available, run build, workflow tests and doctor separately, then use the following manual fallback at the printed dev URL and record that limitation:
+
 
 - The header menu opens on mobile, closes with Escape (returning focus) and closes after following a link.
 - The hero’s “Explore a sample” scrolls to the report below the sticky header.
@@ -57,7 +84,11 @@ For manual verification, serve `_site/` locally on a free port and check:
 - Primary CTAs lead to `https://istocklens.com/download`; other external links use only the verified paths in `_data/site.yml`.
 - At 320px, mobile, tablet and desktop widths there is no horizontal page overflow; sample labels remain visible. Reduced motion disables smooth scrolling and decorative transitions.
 
-Focused Chromium verification was run for the completed page using a temporary local server (no external app navigation). It covered the checks above, local assets, metadata, one `h1`, and all six FAQs. A reusable `npm run check`/regression suite and robust port-aware development launcher are assigned to the next workflow task; no test command is claimed here yet. Screenshots belong in ignored `tmp/` or `.pi/`, not the repository.
+- Inspect at 320, 390, 768, 1024 and 1440px, including a short mobile viewport with the menu open. Scroll the menu to its CTA; tab through all links and observe visible focus.
+- With dev running, temporarily add a Tailwind utility to `index.html`, save, and confirm both CSS and the browser update without manual refresh. Restore the edit; leave idle for several seconds and confirm `jekyll.log` does not repeatedly regenerate. Saving files under `docs/` or `tmp/` must not rebuild.
+- With two harmless local listeners occupying the preferred ports, confirm dev chooses different ports. Explicit occupied overrides must fail. Stop with Ctrl+C, verify both owned children exit, then restart. Never use the protected project’s processes as test targets.
+
+Actual verification and handoff details are recorded in `docs/development-verification.md`. Screenshots, logs and traces belong only in ignored paths.
 
 ## Publishing requirements — owner confirmation required
 
@@ -71,5 +102,6 @@ Focused Chromium verification was run for the completed page using a temporary l
 
 ## Milestones / handoff
 
-Scaffold: Gemfile/npm lockfiles, Jekyll config/layout/includes/data, local Tailwind build, factual/design documentation.
-Completed page: composed landing page, assets, interactions and verification. Worker instructions prohibit direct commits; the parent Pi Long Task session owns milestone commits.
+`0498046` — Build the branded Jekyll landing page (existing parent-created milestone, including scaffold and completed-page work).
+
+This workflow/polish change is ready for the parent Pi Long Task session to commit. Worker instructions prohibit direct commits. At worker verification, Git contained only the existing milestone above; the requested three-commit history must be reconciled by the parent rather than claimed here. See `docs/development-verification.md` for runtime and test handoff.

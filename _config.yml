@@ -30,5 +30,6 @@ exclude:
   - _styles
   - test-results
   - playwright-report
+  - playwright.config.mjs
   - "*.log"
   - "*.pid"
