@@ -453,3 +453,216 @@ test('V2 useful no-JS content and reduced-motion fallback', async ({ browser, ba
   await expect(page).toHaveURL(/#sample$/);
   await context.close();
 });
+
+const v3 = '/version-3/';
+const v3Widths = [320, 390, 768, 1024, 1440, 1920];
+
+test('V3 exact motto, owned metadata, local assets, comparison links and unchanged guarantee', async ({ page, request, baseURL }) => {
+  const errors = [];
+  const remoteRequests = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
+  page.on('request', request => { if (!request.url().startsWith(baseURL)) remoteRequests.push(request.url()); });
+  await page.goto(v3);
+  await page.evaluate(() => document.fonts.ready);
+  await expect(page.locator('body')).toHaveClass('version-3');
+  await expect(page.locator('h1')).toHaveCount(1);
+  await expect(page.getByRole('heading', { level: 1, name: 'Before you buy, know why.', exact: true })).toBeVisible();
+  await expect(page).toHaveTitle('iStockLens — Before you buy, know why.');
+  await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', 'https://istocklens.com/version-3/');
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://istocklens.com/version-3/');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#285be2');
+  for (const selector of ['meta[property="og:image"]', 'meta[name="twitter:image"]']) {
+    await expect(page.locator(selector)).toHaveAttribute('content', 'https://istocklens.com/assets/images/version-3-social.png');
+  }
+  await expect(page.locator('link[rel=icon]')).toHaveAttribute('href', '/assets/images/version-3-favicon.svg');
+  await expect(page.locator('link[rel=stylesheet]')).toHaveAttribute('href', '/assets/css/main.css');
+  await expect(page.locator('script[src]')).toHaveAttribute('src', '/assets/js/main.js');
+  expect(await page.locator('link[rel=preload][as=font]').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')))).toEqual([
+    '/assets/fonts/manrope-latin.woff2', '/assets/fonts/instrument-serif-italic-latin.woff2',
+  ]);
+  const social = await (await request.get('/assets/images/version-3-social.png')).body();
+  expect([social.readUInt32BE(16), social.readUInt32BE(20)]).toEqual([1200, 630]);
+  expect((await request.get('/assets/images/version-3-social.svg')).status()).toBe(200);
+  for (const container of ['.v3-version-switch', '.v3-footer-versions']) {
+    for (const version of [1, 2, 3]) {
+      await expect(page.locator(container).getByRole('link', { name: `Version ${version}`, exact: true })).toHaveAttribute('href', `/version-${version}/`);
+    }
+    await expect(page.locator(`${container} [aria-current=page]`)).toHaveCount(1);
+    await expect(page.locator(`${container} [aria-current=page]`)).toHaveAttribute('href', v3);
+  }
+  await expect(page.locator('.guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
+  await expect(page.locator('.guarantee-scope')).toHaveText('This covers non-use of the app subscription, not investment performance or losses.');
+  await expect(page.locator('.v3-brief-disclaimer')).toHaveText('Illustrative report · not live data');
+  await expect(page.locator('.v3-plot svg')).toHaveAttribute('aria-label', /Not historical market data\./);
+  for (const label of ['Start researching', 'Start your research', 'Get iStockLens']) {
+    const links = page.getByRole('link', { name: new RegExp(`^${label}`), includeHidden: true });
+    expect(await links.count()).toBeGreaterThan(0);
+    for (const link of await links.all()) await expect(link).toHaveAttribute('href', 'https://istocklens.com/download');
+  }
+  const verified = new Set(['/download', '/stocks', '/stocks/aapl', '/today', '/privacy', '/terms']);
+  const refs = await page.locator('[href], [src]').evaluateAll(elements => elements.flatMap(el => ['href', 'src'].filter(attr => el.hasAttribute(attr)).map(attr => el.getAttribute(attr))));
+  for (const ref of new Set(refs)) {
+    if (ref.startsWith('#')) expect(await page.locator(`[id="${ref.slice(1)}"]`).count(), ref).toBe(1);
+    else if (ref.startsWith('/')) expect((await request.get(baseURL + ref)).status(), ref).toBe(200);
+    else if (ref !== 'https://istocklens.com/version-3/') {
+      expect(new URL(ref).origin).toBe('https://istocklens.com');
+      expect(verified.has(new URL(ref).pathname), ref).toBeTruthy();
+    }
+  }
+  expect(await page.evaluate(() => ['Manrope', 'Instrument Serif'].every(family => [...document.fonts].some(font => font.family === family && font.status === 'loaded')))).toBeTruthy();
+  expect(remoteRequests).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('V3 blue typography, headline and art bounds at six widths', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const width of v3Widths) {
+    await page.setViewportSize({ width, height: width < 640 ? 844 : 1000 });
+    // A pointer left over from the previous tab click can hover the CTA after resize.
+    await page.mouse.move(0, 0);
+    await page.goto(v3);
+    await page.evaluate(() => document.fonts.ready);
+    expect(await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(244, 247, 252)');
+    const title = await page.locator('h1').evaluate(el => ({ family: getComputedStyle(el).fontFamily, weight: getComputedStyle(el).fontWeight, color: getComputedStyle(el).color }));
+    expect(title.family).toContain('Manrope');
+    expect(title.weight).toBe('750');
+    expect(title.color).toBe('rgb(20, 43, 80)');
+    expect(await page.locator('h1 em').evaluate(el => ({ family: getComputedStyle(el).fontFamily, weight: getComputedStyle(el).fontWeight, color: getComputedStyle(el).color }))).toEqual({ family: '"Instrument Serif", Georgia, serif', weight: '400', color: 'rgb(40, 91, 226)' });
+    for (const selector of ['.v3-art', '.hero-actions .button-lime', '.guarantee-section']) {
+      expect(await page.locator(selector).evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(40, 91, 226)');
+    }
+    const shell = await page.locator('.hero.shell').boundingBox();
+    const copy = await page.locator('.hero-copy').boundingBox();
+    const art = await page.locator('.v3-art').boundingBox();
+    const brief = await page.locator('.v3-brief').boundingBox();
+    for (const box of [copy, art]) {
+      expect(box.x, `${width}px left bound`).toBeGreaterThanOrEqual(shell.x);
+      expect(box.x + box.width, `${width}px right bound`).toBeLessThanOrEqual(shell.x + shell.width + 1);
+    }
+    const headlineRects = await page.locator('h1').evaluate(el => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      return [...range.getClientRects()].map(rect => rect.toJSON());
+    });
+    for (const rect of headlineRects) {
+      expect(rect.x, `${width}px headline left`).toBeGreaterThanOrEqual(copy.x);
+      expect(rect.right, `${width}px headline right`).toBeLessThanOrEqual(copy.x + copy.width + 1);
+      expect(rect.bottom, `${width}px headline bottom`).toBeLessThanOrEqual(copy.y + copy.height + 1);
+    }
+    expect(brief.width).toBeGreaterThan(220);
+    expect(brief.x).toBeGreaterThanOrEqual(art.x);
+    expect(brief.y).toBeGreaterThanOrEqual(art.y);
+    expect(brief.x + brief.width).toBeLessThanOrEqual(art.x + art.width + 1);
+    expect(brief.y + brief.height).toBeLessThanOrEqual(art.y + art.height + 1);
+    for (const tab of await page.getByRole('tab').all()) {
+      await tab.click();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px overflow`).toBeTruthy();
+    }
+    await page.getByRole('tab').first().click();
+    if (process.env.SCREENSHOTS && [320, 390, 1440].includes(width)) {
+      await mkdir('tmp/version-3', { recursive: true });
+      await page.mouse.move(0, 0);
+      await page.evaluate(() => { document.activeElement.blur(); window.scrollTo({ top: 0, behavior: 'instant' }); });
+      await page.screenshot({ path: `tmp/version-3/page-${width}.png`, fullPage: true });
+      await page.screenshot({ path: `tmp/version-3/hero-${width}.png` });
+    }
+  }
+});
+
+test('V3 keyboard menu, tabs and all FAQs remain usable', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 390, height: 320 });
+  await page.goto(v3);
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
+  const menu = page.getByRole('button', { name: 'Menu' });
+  const nav = page.getByRole('navigation', { name: 'Main navigation' });
+  await expect(nav).not.toBeVisible();
+  await menu.focus();
+  await page.keyboard.press('Enter');
+  await expect(menu).toHaveAttribute('aria-expanded', 'true');
+  // Reach every menu destination by keyboard, including the V3 comparison links.
+  for (const link of await nav.getByRole('link').all()) {
+    await page.keyboard.press('Tab');
+    await expect(link).toBeFocused();
+    const box = await link.boundingBox();
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.y + box.height).toBeLessThanOrEqual(321);
+  }
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeFocused();
+  await expect(nav).not.toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.keyboard.press('Space');
+  await page.keyboard.press('Tab');
+  await expect(nav.getByRole('link', { name: 'The research' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#research$/);
+  await expect(nav).not.toBeVisible();
+  const tabs = page.getByRole('tab');
+  await tabs.first().focus();
+  for (const [key, index] of [['ArrowRight', 1], ['End', 2], ['ArrowRight', 0], ['ArrowLeft', 2], ['Home', 0]]) {
+    await page.keyboard.press(key);
+    await expect(tabs.nth(index)).toBeFocused();
+    await expect(tabs.nth(index)).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('tabpanel')).toHaveCount(1);
+    await expect(page.getByRole('tabpanel')).toHaveAttribute('aria-labelledby', await tabs.nth(index).getAttribute('id'));
+    expect(await tabs.evaluateAll(nodes => nodes.filter(node => node.tabIndex === 0).length)).toBe(1);
+    expect(await tabs.nth(index).evaluate(el => ({ style: getComputedStyle(el).outlineStyle, color: getComputedStyle(el).outlineColor }))).toEqual({ style: 'solid', color: 'rgb(40, 91, 226)' });
+  }
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('tabpanel')).toBeFocused();
+  await expect(page.locator('summary')).toHaveCount(6);
+  for (const summary of await page.locator('summary').all()) {
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    await expect(summary.locator('..')).toHaveAttribute('open', '');
+    await page.keyboard.press('Space');
+    await expect(summary.locator('..')).not.toHaveAttribute('open');
+  }
+});
+
+test('V3 axe WCAG AA on desktop and phone in every tab and expanded controls', async ({ page }) => {
+  test.setTimeout(60000);
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(v3);
+    await page.evaluate(() => document.fonts.ready);
+    for (const tab of await page.getByRole('tab').all()) {
+      await tab.click();
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+      expect(results.violations, `${width}px ${await tab.innerText()}`).toEqual([]);
+    }
+    for (const summary of await page.locator('summary').all()) await summary.click();
+    if (width === 390) await page.getByRole('button', { name: 'Menu' }).click();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    expect(results.violations, `${width}px expanded controls`).toEqual([]);
+  }
+});
+
+test('V3 no-JavaScript navigation, all panels, native FAQ and reduced motion', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce' });
+  try {
+    const page = await context.newPage();
+    await page.goto(baseURL + v3);
+    await page.evaluate(() => document.fonts.ready);
+    for (const width of v3Widths) {
+      await page.setViewportSize({ width, height: 1000 });
+      await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
+      await expect(page.locator('[data-panel]:visible')).toHaveCount(3);
+      await expect(page.getByRole('button', { name: 'Menu' })).not.toBeVisible();
+      await expect(page.locator('.tabs')).not.toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `no JS at ${width}px`).toBeTruthy();
+      expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto');
+      expect(await page.locator('.button').first().evaluate(el => getComputedStyle(el).transitionDuration)).toBe('0s');
+    }
+    await page.locator('summary').first().focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('details').first()).toHaveAttribute('open', '');
+    await page.getByRole('link', { name: 'Explore a sample' }).click();
+    await expect(page).toHaveURL(/#sample$/);
+  } finally {
+    await context.close();
+  }
+});
