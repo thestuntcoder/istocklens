@@ -1,12 +1,12 @@
 # iStockLens landing page
 
-Four responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative, V3 combines editorial warmth with stronger blue typography, and V4 is a modern, product-led research workspace. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
+Four responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial direction is preserved; V2 is an assertive blue research-brief alternative, V3 combines editorial warmth with stronger blue typography, and V4 is a modern, product-led research workspace. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
 
 ## Compare the designs
 
 At the preferred preview address (use the actual URL printed by the launcher):
 
-- **Original:** http://127.0.0.1:4001/ — unchanged original landing page.
+- **Original:** http://127.0.0.1:4001/ — original landing page, with more readable mobile typography.
 - **Version 1:** http://127.0.0.1:4001/version-1/ — the same original content and appearance.
 - **Version 2:** http://127.0.0.1:4001/version-2/ — navy/cobalt, condensed bold typography, research-terminal artwork, ruled grids and a rectangular money-back stamp.
 
@@ -15,6 +15,8 @@ At the preferred preview address (use the actual URL printed by the launcher):
 - **Version 4:** http://127.0.0.1:4001/version-4/ — “Research the stock. Challenge the thesis.” A product-led research workspace with bold sans-serif type, cool-gray/teal panels, interactive scores and a downloadable checklist. Revised after feedback that the first V4 was too editorial.
 
 V2 and V3 have discreet version switchers; V4's footer links to all four designs. Variants share the original verified product facts and locally compiled Tailwind CSS. V4 has its own content, layout, components and progressive-enhancement JavaScript. Alternative styling is scoped by body class or prefixed component classes.
+
+**Mobile reading comfort applies to every version and the homepage:** 18px main copy, 16px supporting text/controls, 14px minimum visible labels, and reflowed research content below 960px. Desktop appearance is preserved. See `docs/mobile-readability.md` for implementation and verification.
 
 ## Prerequisites and install
 
@@ -82,6 +84,7 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 - `_includes/`: navigation, footer, custom logo/icons and HTML/SVG report artwork.
 - `_layouts/default.html`: page shell, metadata, canonical and local assets.
 - `_styles/main.css`: Tailwind import/source scanning, design tokens, crafted components and responsive behavior.
+- `_styles/mobile-readability.css`: scoped phone/tablet readability overrides for the original/V1, V2 and V3; V4 retains its existing dedicated overrides. All apply below 960px.
 - `assets/js/main.js`: progressive enhancement for menu and accessible tabs. Without JavaScript navigation is visible, all sample panels are readable, and native FAQs work.
 - `_config.yml`: title, description, canonical host and build exclusions.
 - `docs/ui-design-spec.md` and `.agents/product-marketing.md`: source-of-truth design and factual constraints.
@@ -101,7 +104,7 @@ bundle exec jekyll doctor
 SCREENSHOTS=1 npm run check      # captures in tmp/screenshots/ and tmp/version-{2,3,4}/
 ```
 
-Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **42 Chromium tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Eight V4 tests cover its product-led identity, sans-serif typography, local fonts/artwork, side-by-side desktop hero and score bars, all research states at six widths, keyboard/menu/native FAQ behavior, truthful checklist progress, real worksheet download, reduced motion and no-JS rendering. Mobile readability checks additionally cover 320–959px: 18px main copy, 16px controls/supporting text, no visible text below 14px, 44px+ touch targets, and semantic stacked research scores on phones. Desktop type and table layout remain unchanged at 960px and above. Axe WCAG A/AA checks cover all four designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
+Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **48 Chromium tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Eight V4 tests cover its product-led identity, sans-serif typography, local fonts/artwork, side-by-side desktop hero and score bars, all research states at six widths, keyboard/menu/native FAQ behavior, truthful checklist progress, real worksheet download, reduced motion and no-JS rendering. Six additional cross-variant tests extend mobile readability and no-JS coverage to the homepage and Versions 1–3, with desktop type/grid guards. Mobile readability checks cover 320–959px across all variants: 18px main copy, 16px controls/supporting text, no visible text below 14px, 44px+ touch targets, and semantic stacked research scores on phones. Desktop type and table layout remain unchanged at 960px and above. Axe WCAG A/AA checks cover all four designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
 
 If the bundled browser cannot be installed, use an installed Chrome with `CHROME_CHANNEL=chrome npm run check`. Failures are explicit, not silently skipped; ignored `test-results/` contains screenshots and traces (`npx playwright show-trace <trace.zip>`). If no browser tooling is available, run build, workflow tests and doctor separately, then use the following manual fallback at the printed dev URL and record that limitation:
 
@@ -117,7 +120,7 @@ If the bundled browser cannot be installed, use an installed Chrome with `CHROME
 - With dev running, temporarily add a Tailwind utility to `index.html`, save, and confirm both CSS and the browser update without manual refresh. Restore the edit; leave idle for several seconds and confirm `jekyll.log` does not repeatedly regenerate. Saving files under `docs/` or `tmp/` must not rebuild.
 - With two harmless local listeners occupying the preferred ports, confirm dev chooses different ports. Explicit occupied overrides must fail. Stop with Ctrl+C, verify both owned children exit, then restart. Never use the protected project’s processes as test targets.
 
-Actual verification and handoff details are recorded in `docs/development-verification.md`; the latest V4 checks and preview handoff are in `docs/version-4-design.md`. Screenshots, logs and traces belong only in ignored paths.
+Actual verification and handoff details are recorded in `docs/development-verification.md`; V4-specific checks are in `docs/version-4-design.md`, and the latest all-variant checks and preview handoff are in `docs/mobile-readability.md`. Screenshots, logs and traces belong only in ignored paths.
 
 ## Publishing requirements — owner confirmation required
 
@@ -140,5 +143,6 @@ Actual verification and handoff details are recorded in `docs/development-verifi
 - `b73ad0a` — Add the blue editorial version-3 with the original motto.
 - `cf8ad9c` — Create the initial version-4 for analytical investors.
 - V4 workspace refinement — remove the editorial direction in favor of bold sans-serif typography, a split product hero and compact data-led panels.
+- All-variant mobile readability — larger reading text, controls, labels and score rows on every route, preserving desktop styling.
 
 See `git log --oneline` for the full commit history and `docs/development-verification.md` for verification details.

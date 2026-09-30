@@ -964,3 +964,112 @@ test('V4 useful no-JS research, controls and reduced-motion fallback', async ({ 
     await expect(page).toHaveURL(/#research-example$/);
   } finally { await context.close(); }
 });
+
+const readableVariants = [
+  { name: 'Original', route: '/', prefix: '' },
+  { name: 'V1', route: '/version-1/', prefix: '' },
+  { name: 'V2', route: '/version-2/', prefix: 'v2-' },
+  { name: 'V3', route: '/version-3/', prefix: '' },
+];
+
+async function expectReadableMobileText(page, label) {
+  const undersized = await page.evaluate(() => [...document.body.querySelectorAll('*')].filter(el => {
+    const rect = el.getBoundingClientRect();
+    return rect.width > 1 && rect.height > 1 && !el.closest('[aria-hidden="true"]') &&
+      getComputedStyle(el).visibility !== 'hidden' &&
+      [...el.childNodes].some(node => node.nodeType === 3 && node.textContent.trim()) &&
+      parseFloat(getComputedStyle(el).fontSize) < 14;
+  }).map(el => ({ text: el.textContent.trim().slice(0, 60), size: getComputedStyle(el).fontSize })));
+  expect(undersized, label).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label).toBeTruthy();
+}
+
+for (const { name, route, prefix } of readableVariants) {
+  test(`${name} mobile reading comfort across all research states and controls`, async ({ page }) => {
+    test.setTimeout(60000);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const width of [320, 375, 390, 430, 640, 767, 768, 900, 959]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator(`.${prefix}hero-description`)).toHaveCSS('font-size', '18px');
+      await expect(page.locator(`.${prefix}hero-guarantee`)).toHaveCSS('font-size', '16px');
+      await expect(page.locator(`.${prefix}guarantee-exact`)).toHaveCSS('font-size', '18px');
+      await expect(page.locator(`.${prefix}score-row strong`).first()).toHaveCSS('font-size', '22px');
+      for (const row of await page.locator(`.${prefix}score-row`).all()) {
+        const metric = await row.locator(':scope > span').boundingBox();
+        const score = await row.locator('strong').boundingBox();
+        const bar = await row.locator(`.${prefix}score-track`).boundingBox();
+        expect(metric.x + metric.width).toBeLessThanOrEqual(score.x);
+        expect(bar.y).toBeGreaterThanOrEqual(Math.max(metric.y + metric.height, score.y + score.height));
+      }
+      for (const tab of await page.getByRole('tab').all()) {
+        await tab.click();
+        await expect(tab).toHaveCSS('font-size', '16px');
+        await expectReadableMobileText(page, `${name}, ${width}px, ${await tab.textContent()}`);
+        const target = await tab.boundingBox();
+        expect(target.width).toBeGreaterThanOrEqual(44);
+        expect(target.height).toBeGreaterThanOrEqual(44);
+      }
+      if (prefix === 'v2-') await expect(page.locator('.v2-valuation-number')).toHaveCSS('font-size', '72px');
+      for (const selector of [`.${prefix}hero-actions a`, `.${prefix}menu-toggle`, `.${prefix}faq-list summary`, `.${prefix}footer-top nav a`, '.v3-footer-versions a', '.v2-footer .v2-switch a']) {
+        for (const control of await page.locator(selector).all()) {
+          const target = await control.boundingBox();
+          expect(target.width, `${name} ${selector} at ${width}px`).toBeGreaterThanOrEqual(44);
+          expect(target.height, `${name} ${selector} at ${width}px`).toBeGreaterThanOrEqual(44);
+        }
+      }
+      // Include normally hidden FAQ text and the open menu, not just the hero.
+      for (const summary of await page.locator('summary').all()) await summary.click();
+      expect(await page.locator(`.${prefix}faq-answer`).evaluateAll(nodes => nodes.map(node => getComputedStyle(node).fontSize))).toEqual(Array(6).fill('18px'));
+      await page.getByRole('button', { name: 'Menu' }).click();
+      const nav = page.getByRole('navigation', { name: 'Main navigation' });
+      for (const link of await nav.getByRole('link').all()) {
+        const target = await link.boundingBox();
+        expect(target.width).toBeGreaterThanOrEqual(44);
+        expect(target.height).toBeGreaterThanOrEqual(44);
+      }
+      await expectReadableMobileText(page, `${name}, ${width}px, expanded FAQs/menu`);
+      await page.keyboard.press('Escape');
+    }
+  });
+}
+
+test('mobile readability overrides preserve original/V1/V2/V3 desktop typography and grids', async ({ page }) => {
+  for (const { name, route, prefix } of readableVariants) {
+    for (const width of [960, 1024, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator('body')).toHaveCSS('font-size', '15px');
+      const introSize = name === 'V3' ? (width < 1200 ? 14 : 15) : name === 'V2' ? (width < 1200 ? 14 : 15) : width >= 1500 ? 16 : width < 1200 ? 13 : 15;
+      await expect(page.locator(`.${prefix}hero-description`)).toHaveCSS('font-size', `${introSize}px`);
+      const buttonSize = name === 'V2' ? (width < 1200 ? 12 : 13) : name === 'V3' ? (width < 1200 ? 11 : 13) : width < 1200 ? 11 : 12;
+      await expect(page.locator(`.${prefix}hero-actions .${prefix}button`).first()).toHaveCSS('font-size', `${buttonSize}px`);
+      const columns = selector => page.locator(selector).first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+      expect(await columns(`.${prefix}hero-grid`)).toBe(2);
+      expect(await columns(`.${prefix}score-row`)).toBe(3);
+    }
+  }
+});
+
+test('all earlier variants retain readable no-JS mobile navigation, research and FAQs', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  try {
+    for (const { name, route, prefix } of readableVariants) {
+      await page.goto(baseURL + route);
+      for (const width of [320, 390, 768, 959]) {
+        await page.setViewportSize({ width, height: 1000 });
+        await page.evaluate(() => document.fonts.ready);
+        await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
+        await expect(page.locator('[data-panel]:visible')).toHaveCount(3);
+        await expect(page.locator(`.${prefix}hero-description`)).toHaveCSS('font-size', '18px');
+        await expectReadableMobileText(page, `${name} no-JS at ${width}px`);
+      }
+      await page.locator('summary').first().click();
+      await expect(page.locator(`.${prefix}faq-answer`).first()).toBeVisible();
+      await expect(page.locator(`.${prefix}faq-answer`).first()).toHaveCSS('font-size', '18px');
+    }
+  } finally { await context.close(); }
+});

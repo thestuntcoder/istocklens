@@ -1,6 +1,6 @@
 # Product Marketing Context
 
-**Document version:** v1.2
+**Document version:** v1.3
 **Last updated:** 2026-09-30
 
 ## Product overview — verified
@@ -17,7 +17,7 @@ Scattered opinions can make conviction harder to justify. A structured report ca
 ## Message and voice
 Before you buy, know why. Business quality is not the same as good value. Calm, precise and independent. Visual direction varies by version: V4 is explicitly product-led, technical and sans-serif—not editorial—following user feedback. Plain-language benefits and concrete capabilities. Kennedy-inspired clarity of argument and Hormozi-inspired bounded risk reversal, without imitating either author. Avoid hype, stock picks, guaranteed outcomes, urgency, fabricated customer quotes/avatars/ratings/logos and unsupported financial claims.
 
-Mobile presentation requirement: the user reports difficulty reading the smaller type on a phone as a 40+ reader. Prioritize comfortable 18px main copy, 16px controls/supporting text, and labels no smaller than 14px. Reflow dense content instead of shrinking it. Keep the approved desktop presentation unchanged.
+Mobile presentation requirement applies to **all four versions and the homepage**, not just V4: the user reports difficulty reading the smaller type on a phone as a 40+ reader. Prioritize comfortable 18px main copy, 16px controls/supporting text, and labels no smaller than 14px. Reflow dense content instead of shrinking it. Keep the approved desktop presentation unchanged.
 
 ## Proof and commercial constraints
 Only supplied product facts are proof. No testimonials, user counts, rankings or outcomes supplied. AAPL sample is illustrative, not live data or a recommendation: Strong quality, Pricey valuation; Growth 65, Profitability 90, Cash 90, Valuation 49, Stability 75.
@@ -31,6 +31,7 @@ Primary conversion: verified https://istocklens.com/download. Allowed labels Get
 Owner confirmation of guarantee process/eligibility, commercial terms, legal copy, deployment canonical and supported coverage. No new commercial promises until verified.
 
 ## Changelog
+- v1.3 (2026-09-30) — Clarify that mobile reading comfort applies to every variant and the homepage, not only V4.
 - v1.2 (2026-09-30) — Record mobile reading-comfort requirements; desktop and product/commercial facts are unchanged.
 - v1.1 (2026-09-30) — Record the user's non-editorial V4 direction. Verified product facts and commercial constraints are unchanged.
 - v1 (2026-09-29) — Initial context from task-supplied verified public research and explicit messaging constraints.

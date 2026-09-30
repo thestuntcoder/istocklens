@@ -10,6 +10,11 @@ An independent investor's field journal, not a trading terminal. Warm ivory #f7f
 
 Desktop hero headline ~88px; responsive clamp to ~56px on small phones. Large forest serif emphasis, compact uppercase labels, body ~16–18px. Light report panels provide contrast against a forest/pale-green illustration stage. SVG illustration graphics are conceptual, not time-series market data.
 
+## Mobile readability — applies to all variants
+Following the user's clarification, the reading-comfort requirement covers `/`, `/version-1/`, `/version-2/`, `/version-3/` and `/version-4/`, not just V4. Below 960px use 18px main copy, 16px supporting text and controls, and visible labels no smaller than 14px. Primary score values are 22px, with labels/values above their bars rather than squeezed into narrow three-column rows. Core controls have 44px+ touch targets. Phone hero actions stack; dense report artwork and step cards reflow. Preserve each variant's palette, fonts, content, scores, guarantee and keyboard/no-JS behavior. Desktop at 960px+ remains unchanged.
+
+Original/V1–V3 overrides live in `_styles/mobile-readability.css`; V4 retains its own previously implemented responsive rules. See `mobile-readability.md` for tested widths, screenshot comparisons and limitations. This supersedes earlier mobile compact-type sizing, not the approved visual directions.
+
 ## Structure and argument
 1. Sticky nav and hero: Before you buy, know why. Understand business, price and risks.
 2. Thin mechanism strip; problem/contrast: another stock tip is not a reason to believe.
@@ -34,7 +39,7 @@ ui-workflow manual protocol (condensed implementation-ready spec); product-marke
 
 ## Version 2 — blue research brief (additive alternative)
 
-The original field-journal direction above remains authoritative for `/` and `/version-1/`. Their shared content, original component rules and artwork are unchanged. `/version-2/` deliberately changes the visual argument, not the product facts.
+The original field-journal direction above remains authoritative for `/` and `/version-1/`. Their shared content and artwork are preserved; the mobile reading-comfort refinement above now supplies larger type and reflowed phone layouts. `/version-2/` deliberately changes the visual argument, not the product facts.
 
 - **Tone:** premium, assertive, athletic/technical and independent; strength without gender restrictions, trading hype or promises of returns.
 - **Tokens:** midnight navy `#08162d`, dark blue `#112847`, electric cobalt `#285cff`, ice-blue `#86b6ff`, cool white `#f2f5fa`; steel supporting surfaces and ruled grids. Corners 0–2px, no glows, serif, green or animation loops.

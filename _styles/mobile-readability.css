@@ -1,0 +1,125 @@
+/* Shared mobile reading-comfort pass for the original/V1, V2 and V3.
+   V4 already has this scale. Nothing in this file applies at 960px or above. */
+@media (max-width: 959px) {
+  body:not(.version-2):not(.version-4), body.version-2 { font-size: 18px; }
+
+  /* Original/V1 and V3 share their content components. */
+  body:not(.version-2):not(.version-4) :is(.hero-description, .problem-copy, .sample-intro, .how-intro, .panel-copy > .muted, .steps p, .fit-note, .guarantee-description, .guarantee-exact, .faq-answer) { font-size: 18px; line-height: 1.7; }
+  body:not(.version-2):not(.version-4) :is(.hero-guarantee, .mechanism, .mechanism-intro, .contrast-row, .panel-takeaway, .chart-footnote, .sample-bottom p, .guarantee-scope, .footer-top .text-sm, .footer-top nav, .footer-bottom, .report-disclaimer, .context-row p, .valuation-pair) { font-size: 16px; line-height: 1.6; }
+  body:not(.version-2):not(.version-4) :is(.eyebrow, .hero .eyebrow, .section-kicker, .sample-ticker, .illustrative-label, .pill, .score-scale, .scorecard .eyebrow, .valuation-card .eyebrow, .context-card .eyebrow, .report-topline, .report-caption, .chart-key, .art-label, .art-bottom, .seal-top, .seal-bottom) { font-size: 14px; line-height: 1.5; letter-spacing: .3px; }
+  body:not(.version-2):not(.version-4) :is(.button, .button-small, .hero-actions .button, .text-link, .sample-bottom .text-link, .fit-note .text-link) { font-size: 16px; min-height: 52px; white-space: normal; line-height: 1.5; }
+  body:not(.version-2):not(.version-4) :is(.button svg, .text-link svg, .hero-guarantee svg) { flex-shrink: 0; }
+  body:not(.version-2):not(.version-4) .menu-toggle { font-size: 16px; min-height: 48px; }
+  body:not(.version-2):not(.version-4) .brand { min-height: 44px; }
+  body:not(.version-2):not(.version-4) .site-header .site-navigation { font-size: 18px; flex-direction: column; align-items: stretch; }
+  body:not(.version-2):not(.version-4) .nav-links { flex-wrap: wrap; }
+  body:not(.version-2):not(.version-4) :is(.nav-links a, .open-app) { min-height: 48px; }
+  body:not(.version-2):not(.version-4) .nav-actions { flex-wrap: wrap; gap: 16px; }
+  body:not(.version-2):not(.version-4) .hero-grid { grid-template-columns: 1fr; }
+  body:not(.version-2):not(.version-4) .hero-description { max-width: 640px; }
+  body:not(.version-2):not(.version-4) .hero-actions { display: grid; grid-template-columns: 1fr; max-width: 440px; gap: 12px; }
+  body:not(.version-2):not(.version-4) .hero-guarantee { min-height: 48px; }
+  body:not(.version-2):not(.version-4) .mechanism > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; width: 100%; }
+  body:not(.version-2):not(.version-4) .mechanism i { font-size: 14px; }
+  body:not(.version-2):not(.version-4) .mechanism-final { border-left: 0; padding-left: 0; }
+  body:not(.version-2):not(.version-4) :is(.sample-toolbar strong, .context-row h4, .valuation-pair b) { font-size: 18px; }
+  body:not(.version-2):not(.version-4) .tabs { gap: 8px; padding-inline: 12px; }
+  body:not(.version-2):not(.version-4) .tabs button { flex: 1; min-width: 0; min-height: 64px; font-size: 16px; line-height: 1.5; white-space: normal; padding: 14px 3px; text-align: center; }
+  body:not(.version-2):not(.version-4) .score-row { grid-template-columns: minmax(0, 1fr) auto; gap: 9px; margin-top: 22px; font-size: 18px; }
+  body:not(.version-2):not(.version-4) .score-row strong { grid-column: 2; grid-row: 1; font-size: 22px; }
+  body:not(.version-2):not(.version-4) .score-track { grid-column: 1 / -1; grid-row: 2; }
+  body:not(.version-2):not(.version-4) :is(.scorecard > div:first-child, .valuation-card > div:first-child, .context-card > div:first-child) { flex-wrap: wrap; gap: 10px; }
+  body:not(.version-2):not(.version-4) .valuation-pair { flex-wrap: wrap; }
+  body:not(.version-2):not(.version-4) .steps { grid-template-columns: 1fr; }
+  body:not(.version-2):not(.version-4) .steps h3 { font-size: 22px; }
+  body:not(.version-2):not(.version-4) .steps p { max-width: none; }
+  body:not(.version-2):not(.version-4) .guarantee-grid { grid-template-columns: 1fr; }
+  body:not(.version-2):not(.version-4) :is(.seal-top, .seal-bottom) { flex-wrap: wrap; gap: 12px; }
+  body:not(.version-2):not(.version-4) .faq-list summary { font-size: 18px; line-height: 1.5; }
+  body:not(.version-2):not(.version-4) .footer-top nav a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; }
+  body:not(.version-2):not(.version-4) .copyright { white-space: normal; }
+
+  /* The original hero becomes a readable report, not a scaled-down postcard. */
+  body:not(.version-2):not(.version-4) .hero-art { min-height: 0; padding: 22px 18px; }
+  body:not(.version-2):not(.version-4) :is(.art-label, .art-bottom) { position: static; display: block; }
+  body:not(.version-2):not(.version-4) .hero-report { position: static; width: 100%; margin: 20px 0 0; padding: 20px 16px 0; transform: none; }
+  body:not(.version-2):not(.version-4) .report-topline { flex-wrap: wrap; gap: 10px; }
+  body:not(.version-2):not(.version-4) .hero-report .company-name { font-size: 22px; }
+  body:not(.version-2):not(.version-4) .hero-report .text-xs { font-size: 14px; }
+  body:not(.version-2):not(.version-4) .company-monogram { flex-shrink: 0; }
+  body:not(.version-2):not(.version-4) .report-star { display: none; }
+  body:not(.version-2):not(.version-4) .report-verdicts strong { font-size: 24px; }
+  body:not(.version-2):not(.version-4) .report-chart > div { flex-wrap: wrap; gap: 8px; }
+  body:not(.version-2):not(.version-4) .mini-scores { grid-template-columns: 1fr; gap: 18px; font-size: 16px; }
+  body:not(.version-2):not(.version-4) .mini-scores b { font-size: 20px; }
+  body:not(.version-2):not(.version-4) .quality-tag { position: static; width: fit-content; max-width: 100%; transform: none; font-size: 16px; margin-top: 20px; }
+  body:not(.version-2):not(.version-4) .art-note { position: static; transform: none; margin-top: 18px; }
+  body:not(.version-2):not(.version-4) .art-note p { font-size: 18px; }
+  body:not(.version-2):not(.version-4) .art-note em { font-size: 26px; }
+  body:not(.version-2):not(.version-4) .art-bottom { margin-top: 18px; }
+
+  /* V3's blue artwork retains its identity with larger, reflowed labels. */
+  body.version-3 :is(.v3-version-switch, .v3-footer-versions, .v3-art-top, .v3-brief-bar, .v3-company p, .v3-verdicts > div > span, .v3-plot small) { font-size: 14px; line-height: 1.5; letter-spacing: .2px; }
+  body.version-3 :is(.v3-version-switch a, .v3-footer-versions a) { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; font-size: 16px; }
+  body.version-3 :is(.v3-art-top, .v3-brief-bar, .v3-plot > div, .v3-art-bottom) { flex-wrap: wrap; gap: 12px; }
+  body.version-3 .v3-monogram { flex-shrink: 0; }
+  body.version-3 .v3-verdicts strong { font-size: 24px; }
+  body.version-3 :is(.v3-plot > div, .v3-brief-scores, .v3-brief-disclaimer, .v3-art-bottom p, .v3-quality-badge) { font-size: 16px; line-height: 1.6; }
+  body.version-3 .v3-brief-scores { grid-template-columns: 1fr; gap: 18px; }
+  body.version-3 :is(.v3-brief-scores strong, .v3-art-bottom strong) { font-size: 20px; }
+
+  /* V2 retains its condensed display type and navy/cobalt palette. */
+  body.version-2 .v2-hero-description,
+  body.version-2 .v2-intro,
+  body.version-2 .v2-benefits article > p:not(.v2-label),
+  body.version-2 .v2-panel > div:first-child > p:not(.v2-label),
+  body.version-2 .v2-steps p,
+  body.version-2 .v2-how-bottom,
+  body.version-2 .v2-guarantee-copy > p:not(.v2-label):not(.v2-guarantee-scope),
+  body.version-2 .v2-faq-answer { font-size: 18px; line-height: 1.7; }
+  body.version-2 :is(.v2-hero-guarantee, .v2-chart-note, .v2-watchpoints, .v2-brief figcaption, .v2-benefits article > div, .v2-workbench-top > p, .v2-workbench-bottom > p, .v2-scorecard .v2-small, .v2-context-list span, .v2-pair, .v2-guarantee-copy .v2-guarantee-scope, .v2-footer-top nav, .v2-footer-bottom > p) { font-size: 16px; line-height: 1.6; }
+  body.version-2 :is(.v2-label, .v2-hero-eyebrow, .v2-brief-top, .v2-brief-company .v2-label, .v2-brief-company p:last-child, .v2-verdicts > div > span, .v2-brief-chart .v2-label, .v2-chart-axis, .v2-watchpoints .v2-label, .v2-mechanism span, .v2-benefits .v2-label, .v2-panel .v2-label, .v2-stamp .v2-label, .v2-faq-number, .v2-footer-top > div > p, .v2-footer-end, .v2-switch) { font-size: 14px; line-height: 1.5; letter-spacing: .2px; }
+  body.version-2 :is(.v2-button, .v2-button-small, .v2-hero-actions .v2-button, .v2-link, .v2-hero-actions .v2-link, .v2-workbench-bottom .v2-link) { font-size: 16px; min-height: 52px; line-height: 1.5; }
+  body.version-2 .v2-brand { min-height: 44px; }
+  body.version-2 .v2-menu-toggle { min-height: 48px; font-size: 16px; }
+  body.version-2 .v2-navigation { font-size: 18px; }
+  body.version-2 .v2-nav-links a { min-height: 48px; }
+  body.version-2 .v2-switch a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; font-size: 16px; }
+  body.version-2 .v2-hero-grid { grid-template-columns: 1fr; }
+  body.version-2 .v2-hero-description { max-width: 640px; }
+  body.version-2 .v2-hero-actions { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 440px; }
+  body.version-2 .v2-hero-actions .v2-link { justify-content: center; }
+  body.version-2 .v2-hero-guarantee { min-height: 48px; }
+  body.version-2 :is(.v2-brief-top, .v2-brief-chart > div:first-child) { flex-wrap: wrap; }
+  body.version-2 .v2-company-code { flex-shrink: 0; }
+  body.version-2 .v2-verdicts > div { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+  body.version-2 .v2-chart-row { font-size: 18px; }
+  body.version-2 .v2-benefits { grid-template-columns: 1fr; }
+  body.version-2 :is(.v2-benefits article, .v2-benefits article + article) { border-left: 0; padding: 28px 0; }
+  body.version-2 .v2-benefits article + article { border-top: 1px solid var(--v2-rule); }
+  body.version-2 .v2-benefits article > p:not(.v2-label) { max-width: none; }
+  body.version-2 .v2-workbench-top :is(b, strong) { font-size: 18px; }
+  body.version-2 .v2-workbench-top > div { flex-wrap: wrap; }
+  body.version-2 .v2-tabs button { font-size: 16px; min-width: 0; min-height: 64px; line-height: 1.5; }
+  body.version-2 .v2-tabs button > span { font-size: 14px; }
+  body.version-2 .v2-panel { min-height: 0; }
+  body.version-2 .v2-score-row { grid-template-columns: minmax(0, 1fr) auto; gap: 9px; margin-top: 22px; font-size: 18px; }
+  body.version-2 .v2-score-row strong { grid-row: 1; grid-column: 2; font-size: 22px; }
+  body.version-2 .v2-score-track { grid-row: 2; grid-column: 1 / -1; }
+  body.version-2 .v2-scorecard > .v2-label { flex-wrap: wrap; }
+  body.version-2 .v2-scorecard .v2-valuation-number { font-size: 72px; }
+  body.version-2 .v2-valuation-number > span { font-size: 16px; }
+  body.version-2 .v2-pair { flex-wrap: wrap; }
+  body.version-2 :is(.v2-pair strong, .v2-context-list strong) { font-size: 18px; }
+  body.version-2 .v2-steps { grid-template-columns: 1fr; }
+  body.version-2 :is(.v2-steps li, .v2-steps li + li) { border-left: 0; padding: 28px 0; }
+  body.version-2 .v2-steps li + li { border-top: 1px solid #aebed3; }
+  body.version-2 .v2-steps p { max-width: none; }
+  body.version-2 .v2-faq-list summary { font-size: 18px; line-height: 1.5; }
+  body.version-2 .v2-footer-top nav a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; }
+}
+@media (max-width: 639px) {
+  body:not(.version-2):not(.version-4) .report-verdicts,
+  body.version-3 .v3-verdicts { grid-template-columns: 1fr; }
+  body:not(.version-2):not(.version-4) :is(.sample-bottom, .fit-note) { align-items: stretch; }
+}

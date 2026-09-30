@@ -2,6 +2,7 @@
 @import "./version-2.css";
 @import "./version-3.css";
 @import "./version-4.css";
+@import "./mobile-readability.css";
 @source "../index.html";
 @source "../version-1/index.html";
 @source "../version-2/index.html";
