@@ -18,7 +18,7 @@
   const retry = find('[data-sf-retry]');
   const presetButton = find('[data-sf-preset]');
   const fields = find('[data-sf-elements]');
-  const labels = ['Email', 'Experience', 'Research interests', 'Payment demo', 'Preview'];
+  const labels = ['Email', 'Experience', 'Research interests', 'Payment', 'Confirmation'];
   let step = 1, completed = false, preset = false, busy = false;
   let launcher, scrollPosition, bodyStyle, inertState = [];
   let generation = 0, elements = [], complete = {}, ready = new Set(), cardErrors = {};
@@ -69,7 +69,7 @@
     find('[data-sf-track]').style.width = `${step * 20}%`;
     find('[data-sf-actions]').hidden = step === 5;
     back.hidden = step === 1;
-    next.textContent = step === 4 ? 'Complete demo · No charge' : 'Continue';
+    next.textContent = step === 4 ? 'Complete setup' : 'Continue';
     if (dialog) dialog.setAttribute('aria-labelledby', `sf-title-${step}`);
     if (page && historyMode !== 'none') {
       const url = `${location.pathname}?step=${step}`;
@@ -126,14 +126,14 @@
     const current = () => ticket === generation && active() && step === 4 && !preset;
     retry.hidden = true;
     find('[data-sf-preset-details]').hidden = !preset;
-    presetButton.textContent = preset ? 'Use Stripe test fields instead' : 'Use a demo card';
-    if (preset) { status.textContent = 'Demo card selected explicitly. No Stripe input needed.'; return; }
-    status.textContent = 'Loading test card fields…';
+    presetButton.textContent = preset ? 'Enter card details instead' : 'Use a test card';
+    if (preset) { status.textContent = 'Test card selected.'; return; }
+    status.textContent = 'Loading payment fields…';
     let mountTimer;
     const fail = () => {
       if (!current()) return;
       stopPayment();
-      status.textContent = 'Stripe is unavailable. Retry, or explicitly choose the fictitious demo card. Nothing was processed.';
+      status.textContent = 'Payment fields are unavailable. Please try again.';
       retry.hidden = false;
     };
     try {
@@ -157,7 +157,7 @@
         element.on('ready', () => {
           if (!current()) return;
           ready.add(type);
-          if (ready.size === 3) { clearTimeout(mountTimer); status.textContent = 'Stripe test fields ready. This demo never submits card details for payment.'; }
+          if (ready.size === 3) { clearTimeout(mountTimer); status.textContent = 'Payment fields ready.'; }
         });
         element.on('loaderror', fail);
         element.on('change', event => {
@@ -188,12 +188,12 @@
     }
     if (step === 4) {
       if (!preset && (ready.size !== 3 || Object.keys(complete).length !== 3 || !Object.values(complete).every(Boolean) || Object.values(cardErrors).some(Boolean))) {
-        error('payment', 'Complete all three test card fields, or choose “Use a demo card”.', find('#sf-payment-error'));
+        error('payment', 'Complete the card details, or use a test card.', find('#sf-payment-error'));
         return;
       }
       busy = true;
       next.disabled = true;
-      status.textContent = 'Preparing the preview locally. No payment is being processed.';
+      status.textContent = 'Finishing setup…';
       const ticket = generation;
       finishTimer = setTimeout(() => {
         if (ticket !== generation || !active() || step !== 4) return;

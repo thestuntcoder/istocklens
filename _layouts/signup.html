@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <meta name="referrer" content="no-referrer">
-  <title>Setup demo · iStockLens</title>
+  <title>Create your account · iStockLens</title>
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   <script src="{{ '/assets/js/signup-flow.js' | relative_url }}" defer></script>
 </head>
 <body class="sf-page sf-theme-{{ page.variant }}">
   <main class="sf-page-shell" data-signup-page>
-    <a class="sf-exit" href="{{ '/version-' | append: page.variant | append: '/' | relative_url }}">← Exit demo</a>
-    <div data-sf-fallback class="sf-fallback"><h1>iStockLens setup demo</h1><p>The demo needs JavaScript. Nothing has been submitted.</p><a href="{{ site.data.site.download }}">Visit the real download page ↗</a></div>
+    <a class="sf-exit" href="{{ '/version-' | append: page.variant | append: '/' | relative_url }}">← Back to iStockLens</a>
+    <div data-sf-fallback class="sf-fallback"><h1>Create your iStockLens account</h1><p>Enable JavaScript to continue setting up your account.</p><a href="{{ site.data.site.download }}">Get iStockLens ↗</a></div>
     {% include signup-flow.html heading='h1' variant=page.variant %}
   </main>
 </body>

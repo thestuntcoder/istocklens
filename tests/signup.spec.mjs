@@ -127,7 +127,7 @@ for (const variant of [1, 2, 3, 4]) {
         }
         if (n === 5) {
           await expect(page.locator('[data-sf-summary="email"]')).toHaveText('reader@example.test');
-          await expect(page.locator('[data-sf-step="5"]')).toContainText('No account was created, no email was sent and no payment was processed.');
+          await expect(page.locator('[data-sf-step="5"] [data-sf-test-notice]')).toHaveText('Test mode · Account activation isn’t connected yet.');
           await page.screenshot({ path: `tmp/signup-flow/v${variant}-${mode}-success.png`, fullPage: mode === 'page' });
           await page.locator('[data-sf-reset]').click();
           await step(page, 1);
@@ -212,7 +212,7 @@ test('no JS hides unavailable controls and keeps verified fallbacks at all route
   for (const v of [1, 2, 3, 4]) {
     await page.goto(`${baseURL}/version-${v}/start/?step=5`);
     await expect(page.locator('[data-signup-flow]')).not.toBeVisible();
-    await expect(page.getByRole('link', { name: 'Visit the real download page' })).toHaveAttribute('href', 'https://istocklens.com/download');
+    await expect(page.getByRole('link', { name: 'Get iStockLens' })).toHaveAttribute('href', 'https://istocklens.com/download');
     await expect(page.locator('input:visible')).toHaveCount(0);
     await page.goto(`${baseURL}/version-${v}/`);
     await expect(page.locator('dialog')).not.toBeVisible();
@@ -358,7 +358,7 @@ test('popup close remains clickable when long payment content is scrolled', asyn
   await toPayment(page);
   const dialog = page.getByRole('dialog');
   await dialog.evaluate(el => { el.scrollTop = el.scrollHeight; });
-  const close = page.getByRole('button', { name: 'Close signup demo' });
+  const close = page.getByRole('button', { name: 'Close signup' });
   const box = await close.boundingBox();
   const bounds = await dialog.boundingBox();
   expect(box.y).toBeGreaterThanOrEqual(bounds.y);
@@ -392,6 +392,40 @@ test('native form submission cannot send answers even when bypassing JS handlers
     if (mode === 'dialog') await expect(page.getByRole('dialog')).not.toBeVisible();
     else await step(page, 2);
     page.off('request', observe);
+  }
+});
+
+test('customer-facing signup copy stays clean while test-payment boundaries remain explicit', async ({ page }) => {
+  await stubStripe(page, 'blocked');
+  for (const variant of [1, 2, 3, 4]) {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/version-${variant}/start/`);
+    await expect(page).toHaveTitle('Create your account · iStockLens');
+    await expect(page.locator('.sf-badge')).toHaveText('Account setup');
+    await expect(page.locator('[data-sf-step="1"] .sf-copy')).toHaveText('Enter your email to get started with iStockLens.');
+    await expect(page.locator('[data-sf-test-notice]:visible')).toHaveCount(0);
+    await page.locator('#sf-email').fill('reader@example.test');
+    for (let n = 1; n <= 5; n++) {
+      await step(page, n);
+      const visibleCopy = await page.locator('[data-signup-flow]').innerText();
+      expect(visibleCopy).not.toMatch(/\b(demo|preview|fictitious|telemetry|token)\b/i);
+      if (n < 4) await expect(page.locator('[data-sf-test-notice]:visible')).toHaveCount(0);
+      if (n === 2) await page.getByRole('radio', { name: 'Beginner', exact: true }).check();
+      if (n === 3) await page.getByRole('radio', { name: 'All stocks', exact: true }).check();
+      if (n === 4) {
+        await expect(page.locator('.sf-guarantee strong')).toHaveText('If you don’t use the app, you get 100% of your money back.');
+        await expect(page.locator('[data-sf-test-notice]:visible')).toContainText('Use test cards only. No charge will be made.');
+        await expect(page.locator('[data-sf-next]')).toHaveText('Complete setup');
+        await page.getByRole('button', { name: 'Use a test card', exact: true }).click();
+        await expect(page.locator('[data-sf-preset-details]')).toHaveText('Test card ending in 4242 selected.');
+      }
+      if (n < 5) await next(page);
+      else {
+        await expect(page.locator('[data-sf-step="5"] .sf-copy')).toHaveText('Your account is getting ready.');
+        await expect(page.locator('[data-sf-test-notice]:visible')).toHaveText('Test mode · Account activation isn’t connected yet.');
+        await expect(page.getByRole('link', { name: 'Get iStockLens' })).toHaveAttribute('href', 'https://istocklens.com/download');
+      }
+    }
   }
 });
 
