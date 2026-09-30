@@ -15,7 +15,22 @@
     <div class="v4-note-panel" id="v4-panel-readout" data-v4-panel="readout">
       <h3 class="v4-sr-only">Illustrative business quality and valuation</h3>
       <div class="v4-readout-summary"><div><span>Business quality</span><strong>Strong <span aria-hidden="true">↗</span></strong></div><div><span>Valuation</span><strong>Pricey <span aria-hidden="true">↗</span></strong></div></div>
-      <div class="v4-ledger-wrap"><table class="v4-ledger"><caption class="v4-sr-only">Illustrative model scores for Apple, with questions to verify independently</caption><thead><tr><th scope="col">Dimension</th><th scope="col">Score <span>/ 100</span></th><th scope="col">What to investigate</th></tr></thead><tbody>{% for score in site.data.sample.scores %}<tr{% if score.name == 'Valuation' %} class="v4-ledger-highlight"{% endif %}><th scope="row">{{ score.name }}</th><td><div class="v4-score-cell"><span class="v4-score-track" aria-hidden="true"><span style="width: {{ score.value }}%"></span></span><span class="v4-data-score">{{ score.value }}</span></div></td><td>{{ site.data.version4.questions[forloop.index0].question }}</td></tr>{% endfor %}</tbody></table><p class="v4-ledger-note">Model outputs are starting points. They are not independently verified conclusions.</p></div>
+      <div class="v4-ledger-wrap">
+        <p class="v4-ledger-mobile-label" aria-hidden="true">Model scores · Questions to investigate</p>
+        <!-- Explicit table roles preserve relationships when phone rows reflow into a grid. -->
+        <table class="v4-ledger" role="table">
+          <caption class="v4-sr-only">Illustrative model scores for Apple, with questions to verify independently</caption>
+          <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Dimension</th><th scope="col" role="columnheader">Score <span>/ 100</span></th><th scope="col" role="columnheader">What to investigate</th></tr></thead>
+          <tbody role="rowgroup">{% for score in site.data.sample.scores %}
+            <tr role="row"{% if score.name == 'Valuation' %} class="v4-ledger-highlight"{% endif %}>
+              <th scope="row" role="rowheader">{{ score.name }}</th>
+              <td role="cell"><div class="v4-score-cell"><span class="v4-score-track" aria-hidden="true"><span style="width: {{ score.value }}%"></span></span><span class="v4-data-score">{{ score.value }}</span><span class="v4-score-unit" aria-hidden="true">/ 100</span></div></td>
+              <td role="cell">{{ site.data.version4.questions[forloop.index0].question }}</td>
+            </tr>
+          {% endfor %}</tbody>
+        </table>
+        <p class="v4-ledger-note">Model outputs are starting points. They are not independently verified conclusions.</p>
+      </div>
     </div>
     <div class="v4-note-panel" id="v4-panel-check" data-v4-panel="check">
       <div class="v4-note-aside"><h3>Validate independently.</h3><p>Take important claims back to company filings and sources you trust. Look for what contradicts the story.</p></div>

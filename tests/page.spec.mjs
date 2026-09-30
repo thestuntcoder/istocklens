@@ -759,6 +759,77 @@ test('V4 responsive notebook and ledger fit all research states', async ({ page 
   }
 });
 
+test('V4 mobile reading sizes, touch targets and stacked score semantics', async ({ page }) => {
+  for (const width of [320, 375, 390, 430, 640, 767, 768, 959]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto(v4);
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('.v4-intro-copy')).toHaveCSS('font-size', '18px');
+    await expect(page.locator('.v4-disclosure')).toHaveCSS('font-size', '16px');
+    await expect(page.locator('.v4-checklist label > span').first()).toHaveCSS('font-size', '18px');
+    for (const tab of await page.getByRole('tab').all()) {
+      await tab.click();
+      const undersized = await page.evaluate(() => [...document.body.querySelectorAll('*')].filter(el => {
+        const rect = el.getBoundingClientRect();
+        return rect.width > 1 && rect.height > 1 && !el.closest('[aria-hidden="true"]') &&
+          getComputedStyle(el).visibility !== 'hidden' &&
+          [...el.childNodes].some(node => node.nodeType === 3 && node.textContent.trim()) &&
+          parseFloat(getComputedStyle(el).fontSize) < 14;
+      }).map(el => ({ text: el.textContent.trim().slice(0, 60), size: getComputedStyle(el).fontSize })));
+      expect(undersized, `small mobile text at ${width}px`).toEqual([]);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+      await expect(tab).toHaveCSS('font-size', '16px');
+      const target = await tab.boundingBox();
+      expect(target.width).toBeGreaterThanOrEqual(44);
+      expect(target.height).toBeGreaterThanOrEqual(44);
+    }
+    await page.getByRole('tab', { name: /The readout/ }).click();
+    const table = page.getByRole('table', { name: /Illustrative model scores/ });
+    await expect(table).toHaveCount(1);
+    await expect(table.getByRole('columnheader')).toHaveCount(3);
+    await expect(table.getByRole('rowheader')).toHaveText(['Growth', 'Profitability', 'Cash', 'Valuation', 'Stability']);
+    await expect(table.getByRole('cell')).toHaveCount(10);
+    await expect(table.getByRole('row')).toHaveCount(6);
+    for (const row of await page.locator('.v4-ledger tbody tr').all()) {
+      const metric = await row.locator('th').boundingBox();
+      const score = await row.locator('td').first().boundingBox();
+      const question = await row.locator('td').last().boundingBox();
+      expect(metric.x + metric.width).toBeLessThanOrEqual(score.x + 1);
+      if (width < 768) {
+        await expect(row).toHaveCSS('display', 'grid');
+        expect(question.y).toBeGreaterThanOrEqual(metric.y + metric.height);
+        await expect(row.locator('.v4-data-score')).toHaveCSS('font-size', '22px');
+        await expect(row.locator('.v4-score-unit')).toBeVisible();
+      }
+    }
+    for (const selector of ['.v4-intro .v4-button', '.v4-intro .v4-text-link', '.v4-menu-button', '.v4-checklist label', '.v4-faq summary', '.v4-footer nav a']) {
+      for (const control of await page.locator(selector).all()) {
+        const target = await control.boundingBox();
+        expect(target.width, `${selector} at ${width}px`).toBeGreaterThanOrEqual(44);
+        expect(target.height, `${selector} at ${width}px`).toBeGreaterThanOrEqual(44);
+      }
+    }
+  }
+});
+
+test('V4 mobile readability changes leave desktop type and table layout intact', async ({ page }) => {
+  for (const width of [960, 1024, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(v4);
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('body')).toHaveCSS('font-size', '16px');
+    await expect(page.locator('.v4-intro-copy')).toHaveCSS('font-size', width < 1200 ? '16px' : '17px');
+    await expect(page.locator('.v4-ledger tbody th').first()).toHaveCSS('font-size', '11px');
+    await expect(page.getByRole('tab').first()).toHaveCSS('font-size', '11px');
+    await expect(page.locator('.v4-readout-summary strong').first()).toHaveCSS('font-size', '22px');
+    await expect(page.locator('.v4-checklist label > span').first()).toHaveCSS('font-size', '13px');
+    await expect(page.locator('.v4-ledger')).toHaveCSS('display', 'table');
+    await expect(page.locator('.v4-ledger tbody tr').first()).toHaveCSS('display', 'table-row');
+    await expect(page.locator('.v4-ledger-mobile-label')).toBeHidden();
+    await expect(page.locator('.v4-score-unit').first()).toBeHidden();
+  }
+});
+
 test('V4 keyboard research, navigation, short-screen menu and FAQs', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1440, height: 900 });

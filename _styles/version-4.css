@@ -73,6 +73,7 @@ body.version-4 {
 .v4-readout-summary strong { display: flex; align-items: center; justify-content: space-between; margin-top: 3px; font-size: 22px; font-weight: 600; line-height: 1.3; letter-spacing: -.5px; }
 .v4-readout-summary strong > span { font-size: 16px; font-weight: 400; }
 .v4-ledger-wrap { padding: 13px 20px 17px; min-width: 0; }
+.v4-ledger-mobile-label, .v4-score-unit { display: none; }
 .v4-ledger { width: 100%; border-collapse: collapse; text-align: left; table-layout: fixed; }
 .v4-ledger th { font-weight: 500; }
 .v4-ledger thead th { font-size: 10px; color: #526571; padding: 8px 7px 11px; border-bottom: 1px solid #dce4e9; vertical-align: bottom; }
@@ -331,5 +332,104 @@ body.version-4 {
   .v4-checklist-badge { display: none; }
   .v4-principles article { display: block; }
   .v4-feature-icon { margin-bottom: 18px; }
+}
+/* Mobile reading comfort takes priority over compact UI density.
+   Keep this type scale after the layout breakpoints; desktop (960px+) is unchanged. */
+@media (max-width: 959px) {
+  body.version-4 { font-size: 18px; }
+  .v4-intro-copy,
+  .v4-section-heading > p:not(.v4-mono):not(.v4-download-note),
+  .v4-principles article p,
+  .v4-boundary-heading > p,
+  .v4-responsibility li,
+  .v4-faq details > p,
+  .v4-guarantee-exact,
+  .v4-note-aside > p,
+  .v4-hypothesis blockquote,
+  .v4-claim-breakdown p,
+  .v4-cross-checks > div p { font-size: 18px; line-height: 1.7; }
+
+  .v4-intro-footnote, .v4-small, .v4-checklist-card > .v4-small,
+  .v4-ledger-note, .v4-note-bottom > p, .v4-below-note,
+  .v4-boundary-note, .v4-download-note, .v4-guarantee-scope,
+  .v4-disclosure, .v4-principles article .v4-principle-detail,
+  .v4-checklist small, .v4-checklist-progress,
+  .v4-footer-top > p { font-size: 16px; line-height: 1.6; }
+
+  .v4-eyebrow, .v4-mono, .v4-capabilities li,
+  .v4-example-caption > span, .v4-workspace-bar,
+  .v4-note-top small, .v4-note-status, .v4-unproven,
+  .v4-hypothesis > .v4-mono, .v4-section-heading > .v4-mono,
+  .v4-boundary-heading .v4-mono, .v4-responsibility .v4-mono,
+  .v4-checklist-top .v4-mono, .v4-checklist-badge,
+  .v4-closing .v4-mono, .v4-footer-bottom,
+  .v4-versions > span { font-size: 14px; line-height: 1.5; letter-spacing: .2px; }
+
+  .v4-button, .v4-button-small, .v4-intro-actions .v4-button,
+  .v4-verification .v4-button, .v4-text-link,
+  .v4-intro-actions .v4-text-link, .v4-note-bottom .v4-text-link,
+  .v4-closing-action .v4-text-link { font-size: 16px; min-height: 52px; line-height: 1.5; }
+  .v4-brand { min-height: 44px; }
+  .v4-menu-button { font-size: 16px; min-height: 48px; }
+  .v4-navigation, .v4-nav-links { font-size: 18px; }
+  .v4-nav-links a { min-height: 48px; }
+  .v4-example-caption h2 { font-size: 18px; }
+  .v4-example-caption { align-items: start; }
+  .v4-note-top strong, .v4-principles h3,
+  .v4-claim-breakdown h4, .v4-cross-checks h4 { font-size: 20px; line-height: 1.4; }
+  .v4-note-aside h3, .v4-checklist-card h3 { font-size: 24px; line-height: 1.35; }
+  .v4-tabs button { min-width: 0; min-height: 60px; font-size: 16px; line-height: 1.4; padding: 10px 3px; }
+  .v4-tabs button > span { display: none; }
+  .v4-readout-summary > div { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+  .v4-readout-summary > div > span { font-size: 16px; line-height: 1.4; }
+  .v4-readout-summary strong { font-size: 28px; }
+  .v4-ledger thead th { font-size: 14px; }
+  .v4-ledger tbody th, .v4-ledger tbody td { font-size: 16px; line-height: 1.6; }
+  .v4-data-score { font-size: 18px; }
+  .v4-note-panel { min-height: 0; }
+  .v4-cross-checks > div > span { width: 32px; height: 32px; font-size: 14px; }
+  .v4-cross-checks > div { padding-block: 18px; }
+  .v4-principles { grid-template-columns: 1fr; }
+  .v4-principles article { display: block; }
+  .v4-feature-icon { margin-bottom: 18px; }
+  .v4-checklist-top { flex-wrap: wrap; }
+  .v4-checklist label { padding-block: 17px; }
+  .v4-checklist label > span { font-size: 18px; line-height: 1.5; }
+  .v4-checklist input { width: 22px; height: 22px; margin-top: 3px; }
+  .v4-faq summary { font-size: 18px; line-height: 1.5; }
+  .v4-footer-top nav { font-size: 16px; gap: 16px; }
+  .v4-footer-top nav a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; }
+  .v4-versions { gap: 8px; }
+  .v4-versions a { min-width: 44px; min-height: 44px; font-size: 16px; }
+}
+@media (max-width: 767px) {
+  .v4-intro-actions { display: grid; grid-template-columns: 1fr; gap: 8px; max-width: 440px; }
+  .v4-intro-actions .v4-text-link { justify-content: center; }
+  .v4-readout-summary { gap: 10px; }
+  .v4-note-top { align-items: start; }
+  .v4-note-status { margin-left: 0; }
+  .v4-ledger-wrap { padding-inline: 14px; }
+  .v4-ledger-mobile-label { display: block; font-size: 14px; line-height: 1.5; color: #526571; margin: 3px 0 14px; }
+  .v4-ledger { display: block; }
+  .v4-ledger thead { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .v4-ledger tbody { display: block; }
+  .v4-ledger tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; row-gap: 9px; align-items: center; padding: 17px 12px; border: 1px solid #dce4e9; border-radius: 7px; margin-bottom: 10px; }
+  .v4-ledger tbody th, .v4-ledger tbody td { padding: 0; border: 0; overflow-wrap: normal; }
+  .v4-ledger tbody th { font-size: 18px; font-weight: 600; line-height: 1.4; }
+  .v4-ledger tbody td:last-child { grid-column: 1 / -1; font-size: 16px; line-height: 1.6; }
+  .v4-score-track { display: none; }
+  .v4-score-cell { gap: 5px; }
+  .v4-data-score { font-size: 22px; }
+  .v4-score-unit { display: inline; font-size: 14px; color: #526571; }
+  .v4-ledger-note { padding-inline: 0; }
+  .v4-verification .v4-button { max-width: 100%; text-align: left; }
+}
+@media (max-width: 359px) {
+  .v4-tabs[role=tablist] { margin-inline: 8px; gap: 2px; }
+  .v4-readout-summary { grid-template-columns: 1fr; }
+  .v4-note-top small { max-width: 180px; }
+  .v4-ledger-wrap { padding-inline: 10px; }
+  .v4-ledger tbody tr { padding-inline: 10px; column-gap: 8px; }
+  .v4-closing-inner { padding-inline: 20px; }
 }
 @media (prefers-reduced-motion: reduce) { .version-4 *, .version-4 *::before, .version-4 *::after { animation: none !important; transition: none !important; } }
