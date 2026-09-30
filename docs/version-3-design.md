@@ -6,7 +6,7 @@ Requested midpoint between the editorial original and the bold blue second versi
 - **Palette:** cool paper `#f4f7fc`, navy `#142b50`, royal blue `#285be2`, powder blue `#e8effc`, slate `#53647e`.
 - **Type:** existing self-hosted Manrope, with 750-weight hero text and stronger section headings; retain Instrument Serif italic for “know why” and the guarantee emphasis. No condensed uppercase wall of type.
 - **Composition:** airy editorial split hero, upright white research brief on a rich blue stage, restrained curves, clear data panels. Cool-blue sample section, bolder process numerals and a rectangular navy money-back seal on a blue section.
-- **Content:** share the original evidence-first argument, verified data, CTAs, FAQ and precise non-use guarantee. No new claims. Samples remain explicitly illustrative, with a conceptual chart rather than live market data.
+- **Content:** share the original evidence-first argument, verified data, CTAs, FAQ and owner-approved guarantee covering non-use or not finding the app useful. No investment-performance claims. Samples remain explicitly illustrative, with a conceptual chart rather than live market data.
 - **Interaction:** existing accessible tabs, native FAQ and responsive menu; V3-only comparison links to all three routes. Semantic layout, skip link, reduced motion and no-JS fallback remain.
 
 ## Implementation

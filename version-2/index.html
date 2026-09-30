@@ -9,7 +9,7 @@ title: "Your money. Your call. Know why. | iStockLens"
       <h1 id="hero-title"><span>YOUR MONEY.</span><span>YOUR CALL.</span><span>KNOW WHY.</span></h1>
       <p class="v2-hero-description">A great business isn’t always a great investment. Check the quality. Challenge the price. Make the call with research—not borrowed conviction.</p>
       <div class="v2-hero-actions flex flex-wrap items-center gap-4"><a class="v2-button" data-signup href="{{ site.data.site.download }}">Start your research {% include arrow.html %}</a><a class="v2-link" href="#sample">Explore a sample <span aria-hidden="true">↓</span></a></div>
-      <a class="v2-hero-guarantee" href="#guarantee">Don’t use the app? 100% money back. <span aria-hidden="true">↗</span></a>
+      <a class="v2-hero-guarantee" href="#guarantee">{{ site.data.site.guarantee_short }} <span aria-hidden="true">↗</span></a>
     </div>
     <div class="v2-hero-art">{% include version-2/research-brief.html %}</div>
   </div>
@@ -34,8 +34,8 @@ title: "Your money. Your call. Know why. | iStockLens"
 </section>
 <section id="guarantee" class="v2-guarantee v2-section" aria-labelledby="guarantee-title">
   <div class="v2-shell grid items-center gap-12 md:grid-cols-2">
-    <div class="v2-stamp"><p class="v2-label">OUR COMMITMENT / APP NON-USE</p><div class="v2-hundred">100<span>%</span></div><div class="v2-money">MONEY<br>BACK.</div><p class="v2-label">IF YOU DON’T USE THE APP.</p></div>
-    <div class="v2-guarantee-copy"><p class="v2-label">04 / PUT THE RESEARCH TO WORK</p><h2 id="guarantee-title" class="v2-title">USE IT.<br>OR DON’T<br>PAY FOR IT.</h2><p>A research tool should earn a place in your process. Not become another subscription you never open.</p><p class="v2-guarantee-exact">{{ site.data.site.guarantee }}</p><p class="v2-guarantee-scope">This covers non-use of the app subscription, not investment performance or losses.</p><a class="v2-button v2-button-white" data-signup href="{{ site.data.site.download }}">Get iStockLens {% include arrow.html %}</a></div>
+    <div class="v2-stamp"><p class="v2-label">OUR COMMITMENT</p><div class="v2-hundred">100<span>%</span></div><div class="v2-money">MONEY<br>BACK.</div><p class="v2-label">IF YOU DON’T USE IT OR DON’T FIND IT USEFUL.</p></div>
+    <div class="v2-guarantee-copy"><p class="v2-label">04 / PUT THE RESEARCH TO WORK</p><h2 id="guarantee-title" class="v2-title">USEFUL.<br>OR YOUR<br>MONEY BACK.</h2><p>A research tool should earn a place in your process. You decide whether it’s useful to you.</p><p class="v2-guarantee-exact">{{ site.data.site.guarantee }}</p><p class="v2-guarantee-scope">{{ site.data.site.guarantee_scope }}</p><a class="v2-button v2-button-white" data-signup href="{{ site.data.site.download }}">Get iStockLens {% include arrow.html %}</a></div>
   </div>
 </section>
 <section class="v2-faq v2-section" aria-labelledby="faq-title"><div class="v2-shell grid gap-10 lg:grid-cols-[0.8fr_1.2fr]"><div><p class="v2-label">NO SMALL PRINT THINKING</p><h2 class="v2-title" id="faq-title">GOOD QUESTIONS.<br>CLEAR ANSWERS.</h2><a class="v2-link mt-7" data-signup href="{{ site.data.site.download }}">Get iStockLens {% include arrow.html %}</a></div><div class="v2-faq-list">{% for faq in site.data.faqs %}<details><summary><span class="v2-faq-number" aria-hidden="true">0{{ forloop.index }}</span>{{ faq.question }}<span class="v2-faq-plus" aria-hidden="true">+</span></summary><div class="v2-faq-answer"><p>{{ faq.answer }}</p>{% if forloop.index == 2 %}<a class="v2-link mt-4" href="{{ site.data.site.sample }}">Open the Apple report <span aria-hidden="true">↗</span></a>{% endif %}</div></details>{% endfor %}</div></div></section>

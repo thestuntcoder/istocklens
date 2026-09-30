@@ -3,6 +3,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
+const guaranteeCopy = 'If you don’t use or don’t find the app useful, you get 100% of your money back.';
+const guaranteeScope = 'This covers your app subscription, not investment performance or losses.';
+
 test('local assets, anchors, metadata, factual CTAs and production exclusions', async ({ page, request, baseURL }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -11,7 +14,7 @@ test('local assets, anchors, metadata, factual CTAs and production exclusions', 
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', 'https://istocklens.com/');
-  await expect(page.locator('.guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
+  await expect(page.locator('.guarantee-exact')).toHaveText(guaranteeCopy);
   const refs = await page.locator('[href], [src]').evaluateAll(elements => elements.flatMap(e => ['href', 'src'].filter(a => e.hasAttribute(a)).map(a => e.getAttribute(a))));
   const verified = new Set(['/download', '/stocks', '/stocks/aapl', '/today', '/privacy', '/terms']);
   for (const ref of new Set(refs)) {
@@ -29,6 +32,42 @@ test('local assets, anchors, metadata, factual CTAs and production exclusions', 
   expect(await page.evaluate(() => [...document.images].every(img => img.complete && img.naturalWidth > 0))).toBeTruthy();
   expect(errors).toEqual([]);
   expect(await page.locator('script[src*="livereload"]').count()).toBe(0);
+});
+
+test('updated guarantee covers non-use or lack of usefulness on every landing and embedded signup', async ({ page }) => {
+  for (const route of ['/', '/version-1/', '/version-2/', '/version-3/', '/version-4/']) {
+    await page.goto(route);
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('#guarantee [class$="guarantee-exact"]')).toHaveText(guaranteeCopy);
+    await expect(page.locator('#guarantee [class$="guarantee-scope"]')).toHaveText(guaranteeScope);
+    await expect(page.locator('.sf-guarantee strong')).toHaveText(guaranteeCopy);
+    await expect(page.locator('.sf-guarantee p')).toHaveText(guaranteeScope);
+    expect(await page.locator('body').textContent()).not.toMatch(/non-use|If you don’t use the app,|Don’t use the app\?/i);
+    if (route !== '/version-4/') {
+      await expect(page.locator('a[class*="hero-guarantee"]')).toContainText('Don’t use it or don’t find it useful? 100% money back.');
+      await expect(page.locator('.seal-bottom, .v2-stamp .v2-label:last-child')).toContainText('IF YOU DON’T USE IT OR DON’T FIND IT USEFUL.');
+      const faq = page.locator('details').filter({ hasText: 'What does the money-back guarantee cover?' });
+      await faq.locator('summary').click();
+      await expect(faq.locator('p')).toHaveText(`${guaranteeCopy} The guarantee covers your app subscription—not investment performance or losses.`);
+    }
+    for (const width of [320, 390, 768, 960, 1440]) {
+      await page.setViewportSize({ width, height: 1000 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route} at ${width}px`).toBe(true);
+      const clipped = await page.locator('#guarantee').evaluate(root => {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        const failures = [];
+        while (walker.nextNode()) {
+          const node = walker.currentNode;
+          if (!node.textContent.trim()) continue;
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          if ([...range.getClientRects()].some(rect => rect.left < -1 || rect.right > innerWidth + 1)) failures.push(node.textContent);
+        }
+        return failures;
+      });
+      expect(clipped, `${route} guarantee text at ${width}px`).toEqual([]);
+    }
+  }
 });
 
 test('mobile navigation closes with Escape, outside click and anchor; all links fit short screens', async ({ page }) => {
@@ -213,8 +252,8 @@ test('V2 assets, fonts, metadata, factual links and isolated branding', async ({
   await expect(page.locator('link[rel=stylesheet]')).toHaveAttribute('href', '/assets/css/main.css');
   await expect(page.locator('script[src="/assets/js/main.js"]')).toHaveCount(1);
   await expect(page.locator('script[src="/assets/js/signup-flow.js"]')).toHaveCount(1);
-  await expect(page.locator('.v2-guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
-  await expect(page.locator('.v2-guarantee-scope')).toHaveText('This covers non-use of the app subscription, not investment performance or losses.');
+  await expect(page.locator('.v2-guarantee-exact')).toHaveText(guaranteeCopy);
+  await expect(page.locator('.v2-guarantee-scope')).toHaveText(guaranteeScope);
   await expect(page.locator('.v2-footer')).toContainText('Investing involves risk, including loss of capital.');
   await expect(page.locator('.v2-brief figcaption')).toHaveText('Illustrative sample · not live data');
   await expect(page.locator('.v2-workbench-top')).toContainText('Illustrative sample · not live data');
@@ -471,8 +510,8 @@ test('V3 exact motto, owned metadata, local assets, comparison links and unchang
     await expect(page.locator(`${container} [aria-current=page]`)).toHaveCount(1);
     await expect(page.locator(`${container} [aria-current=page]`)).toHaveAttribute('href', v3);
   }
-  await expect(page.locator('.guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
-  await expect(page.locator('.guarantee-scope')).toHaveText('This covers non-use of the app subscription, not investment performance or losses.');
+  await expect(page.locator('.guarantee-exact')).toHaveText(guaranteeCopy);
+  await expect(page.locator('.guarantee-scope')).toHaveText(guaranteeScope);
   await expect(page.locator('.v3-brief-disclaimer')).toHaveText('Illustrative report · not live data');
   await expect(page.locator('.v3-plot svg')).toHaveAttribute('aria-label', /Not historical market data\./);
   for (const label of ['Start researching', 'Start your research', 'Get iStockLens']) {
@@ -667,8 +706,8 @@ test('V4 independent identity, factual boundaries, local assets and metadata', a
   await expect(page.locator('link[rel=icon]')).toHaveAttribute('href', '/assets/images/version-4-favicon.svg');
   await expect(page.locator('script[src="/assets/js/version-4.js"]')).toHaveCount(1);
   await expect(page.locator('script[src="/assets/js/signup-flow.js"]')).toHaveCount(1);
-  await expect(page.locator('.v4-guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
-  await expect(page.locator('.v4-guarantee-scope')).toContainText('not investment performance or losses');
+  await expect(page.locator('.v4-guarantee-exact')).toHaveText(guaranteeCopy);
+  await expect(page.locator('.v4-guarantee-scope')).toHaveText(guaranteeScope);
   await expect(page.locator('.v4-note-bottom')).toContainText('not an app screenshot or a current assessment');
   await expect(page.locator('.v4-ledger-note')).toContainText('not independently verified conclusions');
   await expect(page.locator('.v4-disclosure')).toContainText('Investing involves risk, including loss of capital.');

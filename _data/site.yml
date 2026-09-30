@@ -4,4 +4,6 @@ sample: https://istocklens.com/stocks/aapl
 today: https://istocklens.com/today
 privacy: https://istocklens.com/privacy
 terms: https://istocklens.com/terms
-guarantee: "If you don’t use the app, you get 100% of your money back."
+guarantee: "If you don’t use or don’t find the app useful, you get 100% of your money back."
+guarantee_short: "Don’t use it or don’t find it useful? 100% money back."
+guarantee_scope: "This covers your app subscription, not investment performance or losses."

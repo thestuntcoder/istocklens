@@ -1,5 +1,17 @@
 # Development workflow and variant-preview handoff
 
+## Latest guarantee update — 2026-09-30
+
+Owner-approved guarantee: **If you don’t use or don’t find the app useful, you get 100% of your money back.** This supersedes the earlier non-use-only wording recorded in the historical verification below. Both alternatives apply to the app subscription, not investment performance or losses; no refund window, procedure or extra conditions were added.
+
+- Updated all five landing routes, four themed signup flows, shared FAQs, hero reminders, guarantee headings/seals and current product/design documentation. Canonical guarantee, short reminder and scope live in `_data/site.yml`.
+- Production build, **74 Chromium browser + 3 workflow tests (77 total)** and Jekyll doctor passed. Includes an all-route guarantee/FAQ/embedded-signup regression, responsive guarantee text bounds at 320/390/768/960/1440px, and exact guarantee/scope checks in all four desktop dialogs and phone flows.
+- Existing mobile readability, desktop typography, root/V1 equality, keyboard/no-JS, test-payment and axe checks remain passing. CSS, JavaScript and payment behavior are unchanged. No real Stripe-network smoke was rerun for this copy-only update; current payment checks use deterministic stubs.
+- Evidence: `tmp/guarantee-copy/check.log`, `visual.json`, and guarantee captures at 320/390/1440px; signup captures in `tmp/signup-flow/`. Chromium automation is not a physical-device or full accessibility certification.
+- Managed preview restored on **4001 / 35730**. See `signup-flow.md` for the latest handoff; protected **4000 / 35729** were not touched.
+
+## Historical original/V2 verification
+
 Verified 2026-09-29 in `/Users/dj/Sites/istocklanding`.
 
 ## Running preview

@@ -3,6 +3,8 @@ import AxeBuilder from '@axe-core/playwright';
 import { mkdir, readFile } from 'node:fs/promises';
 import { stubStripe, stripeStub } from './stripe-stub.mjs';
 
+const guaranteeCopy = 'If you don’t use or don’t find the app useful, you get 100% of your money back.';
+const guaranteeScope = 'This covers your app subscription, not investment performance or losses.';
 const next = page => page.locator('[data-sf-next]').click();
 const step = (page, n) => expect(page.locator(`[data-sf-step="${n}"]`)).toBeVisible();
 async function toPayment(page, geometry = false) {
@@ -105,6 +107,8 @@ for (const variant of [1, 2, 3, 4]) {
           await next(page);
         }
         if (n === 4) {
+          await expect(page.locator('.sf-guarantee strong')).toHaveText(guaranteeCopy);
+          await expect(page.locator('.sf-guarantee p')).toHaveText(guaranteeScope);
           await next(page);
           await step(page, 4);
           await expect(page.locator('#sf-payment-error')).toBeFocused();
@@ -413,7 +417,8 @@ test('customer-facing signup copy stays clean while test-payment boundaries rema
       if (n === 2) await page.getByRole('radio', { name: 'Beginner', exact: true }).check();
       if (n === 3) await page.getByRole('radio', { name: 'All stocks', exact: true }).check();
       if (n === 4) {
-        await expect(page.locator('.sf-guarantee strong')).toHaveText('If you don’t use the app, you get 100% of your money back.');
+        await expect(page.locator('.sf-guarantee strong')).toHaveText(guaranteeCopy);
+        await expect(page.locator('.sf-guarantee p')).toHaveText(guaranteeScope);
         await expect(page.locator('[data-sf-test-notice]:visible')).toContainText('Use test cards only. No charge will be made.');
         await expect(page.locator('[data-sf-next]')).toHaveText('Complete setup');
         await page.getByRole('button', { name: 'Use a test card', exact: true }).click();

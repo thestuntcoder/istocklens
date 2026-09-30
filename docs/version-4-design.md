@@ -21,14 +21,14 @@ This is a focused visual/layout/content refinement, not a change to the product 
 4. Paired responsibility panels, giving the tool's help and the user's independent validation equal prominence.
 5. Independent cross-check checklist and genuine plain-text download. This is a landing-page reflection tool, not a claimed app verification feature.
 6. Four native FAQs with the existing accurate answers.
-7. Exact non-use guarantee in a compact CTA panel, then disclosures and links to all four designs.
+7. Exact owner-approved money-back guarantee in a compact CTA panel, then disclosures and links to all four designs.
 
 ## Factual boundaries
 Only the existing verified product capabilities are claimed: quantitative business quality/valuation, price action, analyst consensus/targets, news drivers/themes, watchlists and thesis journals. Research is not advice, brokerage, trade execution or investment protection.
 
 Do not claim automatic fact-checking, linked citations, independently verified scores, provider integrations, coverage, current quotes, prices, trials or investment outcomes. References to sources and filings describe work the investor performs independently. The illustrative interface is expressly not an actual app screenshot, current assessment or recommendation. Its score bars visualize only the existing illustrative values: 65/90/90/49/75.
 
-The original guarantee remains exact: **“If you don’t use the app, you get 100% of your money back.”** Non-use of the app subscription, not investment losses. The owner-confirmation publishing gates in README still apply.
+The owner-expanded guarantee is exact: **“If you don’t use or don’t find the app useful, you get 100% of your money back.”** Either non-use or not finding the app useful is covered. This applies to the app subscription, not investment performance or losses. The owner-confirmation publishing gates in README still apply.
 
 ## Implementation and accessibility
 V4 is isolated in `version-4/index.html`, `_layouts/version-4.html`, `_includes/version-4/`, `_data/version4.yml`, `_styles/version-4.css` and `assets/js/version-4.js`. The existing `research-note.html` filename and notebook data hooks are retained internally for compatibility, not as a visual direction. Shared CSS, earlier variant sources and product data are not modified by this refinement.
