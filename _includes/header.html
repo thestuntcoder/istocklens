@@ -4,7 +4,7 @@
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" hidden><span>Menu</span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 14h14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
     <nav id="site-navigation" aria-label="Main navigation" class="site-navigation">
       <div class="nav-links flex items-center gap-7"><a href="#research">The research</a><a href="#how-it-works">How it works</a><a href="#guarantee">Our guarantee</a></div>
-      <div class="nav-actions flex items-center gap-6"><a class="open-app" href="{{ site.data.site.app }}">Open app <span aria-hidden="true">↗</span></a><a class="button button-lime button-small" href="{{ site.data.site.download }}">Start researching {% include arrow.html %}</a></div>
+      <div class="nav-actions flex items-center gap-6"><a class="open-app" href="{{ site.data.site.app }}">Open app <span aria-hidden="true">↗</span></a><a class="button button-lime button-small" data-signup href="{{ site.data.site.download }}">Start researching {% include arrow.html %}</a></div>
     </nav>
   </div>
 </header>

@@ -1,6 +1,6 @@
 # iStockLens landing page
 
-Four responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial direction is preserved; V2 is an assertive blue research-brief alternative, V3 combines editorial warmth with stronger blue typography, and V4 is a modern, product-led research workspace. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
+Four responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial direction is preserved; V2 is an assertive blue research-brief alternative, V3 combines editorial warmth with stronger blue typography, and V4 is a modern, product-led research workspace. No Tailwind CDN, external font requests, browser framework or site analytics. A clearly labeled five-step signup/payment **demo** uses local form logic and lazily loads official Stripe.js only at payment; it never creates an account, sends an email or processes a payment. Product and commercial claims follow the supplied public research.
 
 ## Compare the designs
 
@@ -18,6 +18,14 @@ V2 and V3 have discreet version switchers; V4's footer links to all four designs
 
 **Mobile reading comfort applies to every version and the homepage:** 18px main copy, 16px supporting text/controls, 14px minimum visible labels, and reflowed research content below 960px. Desktop appearance is preserved. See `docs/mobile-readability.md` for implementation and verification.
 
+## Signup demo
+
+Acquisition CTAs open a themed native dialog at ≥768px; at ≤767px they navigate to real `/version-{1,2,3,4}/start/` pages (homepage uses V1). Direct start URLs work at every width. Flow: email → experience → research interests → scoped guarantee/payment demo → congratulations/account-ready **preview only**.
+
+Answers remain in page memory, not storage, URLs or requests; refreshing may restart the flow. No-JS and modifier-clicks retain the verified real download links. Stripe test fields accept 4242/future expiry/test CVC; an explicit fictitious preset works when Stripe is unavailable. Stripe may emit external telemetry after entering payment. The public test key is from [Stripe’s official MIT Elements examples](https://github.com/stripe/elements-examples/blob/master/js/index.js), not a secret. No tokenization or payment APIs are called.
+
+See **`docs/signup-flow.md`** for implementation, privacy boundaries, actual real-versus-stubbed Stripe results, screenshots and the latest managed preview handoff.
+
 ## Prerequisites and install
 
 Ruby 3.1+ (tested 3.1.2), Bundler 2.6.8, Node 22 / npm.
@@ -28,7 +36,7 @@ npm ci
 npm run build
 ```
 
-`npm run build` compiles `_styles/main.css` into `assets/css/main.css`, then runs production Jekyll into `_site/`. Both generated paths are Git-ignored. **Run the CSS build before standalone Jekyll commands.** The lockfiles pin both dependency trees. Font binaries and social preview assets are committed source assets; there are no runtime asset downloads.
+`npm run build` compiles `_styles/main.css` into `assets/css/main.css`, then runs production Jekyll into `_site/`. Both generated paths are Git-ignored. **Run the CSS build before standalone Jekyll commands.** The lockfiles pin both dependency trees. Font binaries and social preview assets are committed source assets. Runtime assets are local except official Stripe.js/Elements, requested only after entering the payment demo.
 
 ## Development
 
@@ -78,6 +86,7 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 - `_includes/version-2/`: dedicated header, footer, research-brief artwork and interactive sample.
 - `_styles/version-2.css`: isolated blue tokens, typography, components and responsive rules, imported by `_styles/main.css`.
 - `assets/images/version-2-{favicon,social}.svg` and `version-2-social.png`: original V2 branding and 1200 × 630 social artwork.
+- `_includes/signup-flow.html`, `_includes/signup-dialog.html`, `_layouts/signup.html`, `version-*/start/`, `_styles/signup-flow.css`, `assets/js/signup-flow.js`: shared themed five-step demo, native desktop dialog and mobile pages.
 - `_data/site.yml`: verified external destinations and canonical guarantee sentence.
 - `_data/sample.yml`: explicitly illustrative Apple/AAPL sample and scores.
 - `_data/faqs.yml`: FAQ copy.
@@ -104,7 +113,7 @@ bundle exec jekyll doctor
 SCREENSHOTS=1 npm run check      # captures in tmp/screenshots/ and tmp/version-{2,3,4}/
 ```
 
-Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **48 Chromium tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Eight V4 tests cover its product-led identity, sans-serif typography, local fonts/artwork, side-by-side desktop hero and score bars, all research states at six widths, keyboard/menu/native FAQ behavior, truthful checklist progress, real worksheet download, reduced motion and no-JS rendering. Six additional cross-variant tests extend mobile readability and no-JS coverage to the homepage and Versions 1–3, with desktop type/grid guards. Mobile readability checks cover 320–959px across all variants: 18px main copy, 16px controls/supporting text, no visible text below 14px, 44px+ touch targets, and semantic stacked research scores on phones. Desktop type and table layout remain unchanged at 960px and above. Axe WCAG A/AA checks cover all four designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
+Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **72 Chromium tests** include 24 deterministic signup-flow tests (four themes, dialog/page states, axe, mobile history, privacy, errors and lazy Stripe stubs). The original **48 landing tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Eight V4 tests cover its product-led identity, sans-serif typography, local fonts/artwork, side-by-side desktop hero and score bars, all research states at six widths, keyboard/menu/native FAQ behavior, truthful checklist progress, real worksheet download, reduced motion and no-JS rendering. Six additional cross-variant tests extend mobile readability and no-JS coverage to the homepage and Versions 1–3, with desktop type/grid guards. Mobile readability checks cover 320–959px across all variants: 18px main copy, 16px controls/supporting text, no visible text below 14px, 44px+ touch targets, and semantic stacked research scores on phones. Desktop type and table layout remain unchanged at 960px and above. Axe WCAG A/AA checks cover all four designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
 
 If the bundled browser cannot be installed, use an installed Chrome with `CHROME_CHANNEL=chrome npm run check`. Failures are explicit, not silently skipped; ignored `test-results/` contains screenshots and traces (`npx playwright show-trace <trace.zip>`). If no browser tooling is available, run build, workflow tests and doctor separately, then use the following manual fallback at the printed dev URL and record that limitation:
 
@@ -113,18 +122,18 @@ If the bundled browser cannot be installed, use an installed Chrome with `CHROME
 - The hero’s “Explore a sample” scrolls to the report below the sticky header.
 - Each report tab shows different content. ArrowLeft/Right wrap; Home/End select first/last. V2’s vertical rail at 768px and above also uses ArrowUp/Down; its ARIA orientation updates on resize. Exactly one tab is selected and in the tab order.
 - Each native FAQ expands using click, Enter or Space. With JavaScript disabled, navigation and all three report panels remain available.
-- Primary CTAs lead to `https://istocklens.com/download`; other external links use only the verified paths in `_data/site.yml`.
+- Primary acquisition CTAs open the themed demo with JavaScript; without it, or on modifier-click, they lead to `https://istocklens.com/download`. Other external links use only the verified paths in `_data/site.yml`.
 - At 320px, mobile, tablet and desktop widths there is no horizontal page overflow; sample labels remain visible. Reduced motion disables smooth scrolling and decorative transitions.
 
 - Inspect at 320, 390, 768, 1024 and 1440px, including a short mobile viewport with the menu open. Scroll the menu to its CTA; tab through all links and observe visible focus.
 - With dev running, temporarily add a Tailwind utility to `index.html`, save, and confirm both CSS and the browser update without manual refresh. Restore the edit; leave idle for several seconds and confirm `jekyll.log` does not repeatedly regenerate. Saving files under `docs/` or `tmp/` must not rebuild.
 - With two harmless local listeners occupying the preferred ports, confirm dev chooses different ports. Explicit occupied overrides must fail. Stop with Ctrl+C, verify both owned children exit, then restart. Never use the protected project’s processes as test targets.
 
-Actual verification and handoff details are recorded in `docs/development-verification.md`; V4-specific checks are in `docs/version-4-design.md`, and the latest all-variant checks and preview handoff are in `docs/mobile-readability.md`. Screenshots, logs and traces belong only in ignored paths.
+Actual verification and handoff details are recorded in `docs/development-verification.md`; V4-specific checks are in `docs/version-4-design.md`, the all-variant readability checks are in `docs/mobile-readability.md`, and the latest signup validation and preview handoff are in `docs/signup-flow.md`. Screenshots, logs and traces belong only in ignored paths.
 
 ## Publishing requirements — owner confirmation required
 
-- Guarantee exactly: **100% money back if customer does not use the app.** Subscription non-use is the sole stated condition. The guarantee is not investment protection, dissatisfaction coverage or a return promise.
+- Guarantee exactly: **If you don’t use the app, you get 100% of your money back.** Subscription non-use is the sole stated condition. The guarantee is not investment protection, dissatisfaction coverage or a return promise.
 - **Confirm eligibility and the refund process with the owner before production.** Do not invent time limits, procedures or additional restrictions; the implementation deliberately adds none.
 - **Pricing is not verified.** The known `/pricing` endpoint returns 404. There are no prices, pricing links, trial lengths, discounts or invented plans here.
 - Confirm legal copy, supported coverage, and download destination readiness before publishing. This page makes no specific coverage claim.

@@ -25,11 +25,13 @@
   <link rel="preload" href="{{ '/assets/fonts/ibm-plex-sans-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   <script src="{{ '/assets/js/version-4.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/signup-flow.js' | relative_url }}" defer></script>
 </head>
 <body class="version-4">
   <a class="v4-skip" href="#main">Skip to content</a>
   {% include version-4/header.html %}
   <main id="main" tabindex="-1">{{ content }}</main>
   {% include version-4/footer.html %}
+  {% include signup-dialog.html variant=4 %}
 </body>
 </html>

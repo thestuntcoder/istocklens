@@ -33,6 +33,8 @@ Ignored evidence: `tmp/mobile-all/check.log`, `desktop-review.json`, before/afte
 
 ## Preview handoff
 
+These are historical readability-handoff PIDs. The current signup-demo validation and restored runtime are recorded in `signup-flow.md`.
+
 Managed preview restored after production checks:
 
 - Homepage: http://127.0.0.1:4001/

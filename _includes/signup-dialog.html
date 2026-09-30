@@ -1,0 +1,4 @@
+<dialog class="sf-dialog sf-theme-{{ include.variant }}" data-signup-dialog data-start="{{ '/version-' | append: include.variant | append: '/start/' | relative_url }}" aria-labelledby="sf-title-1">
+  <div class="sf-dialog-toolbar"><button type="button" class="sf-close" data-sf-close aria-label="Close signup demo">Close <span aria-hidden="true">×</span></button></div>
+  {% include signup-flow.html variant=include.variant %}
+</dialog>

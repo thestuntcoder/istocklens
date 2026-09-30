@@ -1,0 +1,60 @@
+<div class="sf-flow" data-signup-flow hidden>
+  <div class="sf-topline"><span class="sf-brand">{% if include.variant == 4 %}{% include version-4/mark.html %}{% else %}{% include logo.html %}{% endif %}</span><span class="sf-badge">Demo · No charges</span></div>
+  <p class="sf-progress" role="status" aria-live="polite" aria-atomic="true">Step 1 of 5 · Email</p>
+  <div class="sf-track" aria-hidden="true"><span data-sf-track></span></div>
+  <!-- Dialog-method submission never makes a network request, even if JS fails.
+       Outside a dialog the browser aborts native submission; JS handles the demo. -->
+  <form class="sf-form" method="dialog" novalidate>
+    <section data-sf-step="1" aria-labelledby="sf-title-1">
+      <{{ include.heading | default: 'h2' }} class="sf-title" id="sf-title-1" tabindex="-1">Your research starts here.</{{ include.heading | default: 'h2' }}>
+      <p class="sf-copy">Try a personalized setup preview. No account is created and no email is sent.</p>
+      <label class="sf-label" for="sf-email">Email address</label>
+      <input id="sf-email" class="sf-input" type="email" autocomplete="email" inputmode="email" required maxlength="254" aria-describedby="sf-email-help sf-email-error">
+      <p id="sf-email-help" class="sf-support">A sample address is fine. Your answers stay in this page’s memory. Refreshing may restart the demo.</p>
+      <p id="sf-email-error" class="sf-error" hidden></p>
+    </section>
+    <section data-sf-step="2" aria-labelledby="sf-title-2" hidden>
+      <{{ include.heading | default: 'h2' }} class="sf-title" id="sf-title-2" tabindex="-1">Make it your level.</{{ include.heading | default: 'h2' }}>
+      <p class="sf-copy">How would you describe your investing experience?</p>
+      <fieldset class="sf-options" aria-describedby="sf-experience-error"><legend class="sf-label">Choose your experience</legend>
+        {% assign experience_options = 'Professional|Intermediate|Beginner' | split: '|' %}
+        {% for option in experience_options %}<label class="sf-option"><input type="radio" name="experience" value="{{ option }}"><span>{{ option }}</span><span class="sf-option-mark" aria-hidden="true">↗</span></label>{% endfor %}
+      </fieldset>
+      <p id="sf-experience-error" class="sf-error" hidden></p>
+    </section>
+    <section data-sf-step="3" aria-labelledby="sf-title-3" hidden>
+      <{{ include.heading | default: 'h2' }} class="sf-title" id="sf-title-3" tabindex="-1">Where does your curiosity go?</{{ include.heading | default: 'h2' }}>
+      <p class="sf-copy">Choose the stocks you’re interested in researching.</p>
+      <fieldset class="sf-options" aria-describedby="sf-region-help sf-region-error"><legend class="sf-label">Choose your interest</legend>
+        {% assign region_options = 'US|EU|China|All stocks' | split: '|' %}
+        {% for option in region_options %}<label class="sf-option"><input type="radio" name="region" value="{{ option }}"><span>{{ option }}</span><span class="sf-option-mark" aria-hidden="true">↗</span></label>{% endfor %}
+      </fieldset>
+      <p id="sf-region-help" class="sf-support">These are research interests, not promises of market or stock coverage.</p>
+      <p id="sf-region-error" class="sf-error" hidden></p>
+    </section>
+    <section data-sf-step="4" aria-labelledby="sf-title-4" hidden>
+      <{{ include.heading | default: 'h2' }} class="sf-title" id="sf-title-4" tabindex="-1">Research with a clear guarantee.</{{ include.heading | default: 'h2' }}>
+      <div class="sf-guarantee"><strong>{{ site.data.site.guarantee }}</strong><p>This covers non-use of the app subscription, not investment performance or losses.</p></div>
+      <p class="sf-support">Payment preview only. No charge, token or payment is created. Use only test details: <strong>4242 4242 4242 4242</strong>, a future expiry and any three-digit CVC. Never enter a real card.</p>
+      <p class="sf-support">Entering this step loads Stripe, which may send external telemetry. Your email and preferences are not sent to Stripe.</p>
+      <p class="sf-support" data-sf-payment-status role="status" aria-live="polite">Loading test card fields…</p>
+      <div data-sf-elements hidden>
+        <div class="sf-card-field"><label class="sf-label" for="sf-card-number">Test card number</label><div id="sf-card-number" class="sf-element"></div></div>
+        <div class="sf-card-row"><div class="sf-card-field"><label class="sf-label" for="sf-card-expiry">Expiry</label><div id="sf-card-expiry" class="sf-element"></div></div><div class="sf-card-field"><label class="sf-label" for="sf-card-cvc">CVC</label><div id="sf-card-cvc" class="sf-element"></div></div></div>
+      </div>
+      <div class="sf-payment-tools"><button type="button" class="sf-secondary" data-sf-retry hidden>Retry Stripe</button><button type="button" class="sf-secondary" data-sf-preset>Use a demo card</button></div>
+      <p class="sf-support" data-sf-preset-details hidden>Fictitious preset selected: 4242 4242 4242 4242 · 12/39 · 123. No card details are submitted. Continue to simulate completion.</p>
+      <p id="sf-payment-error" class="sf-error" tabindex="-1" hidden></p>
+    </section>
+    <section data-sf-step="5" aria-labelledby="sf-title-5" hidden>
+      <p class="sf-success-mark" aria-hidden="true">✓</p>
+      <{{ include.heading | default: 'h2' }} class="sf-title" id="sf-title-5" tabindex="-1">Congratulations.</{{ include.heading | default: 'h2' }}>
+      <p class="sf-copy"><strong>Your account is getting ready — preview only.</strong></p>
+      <p class="sf-support">No account was created, no email was sent and no payment was processed. This is the end of the demo, not a live signup.</p>
+      <dl class="sf-summary"><div><dt>Email preview</dt><dd data-sf-summary="email"></dd></div><div><dt>Experience</dt><dd data-sf-summary="experience"></dd></div><div><dt>Research interest</dt><dd data-sf-summary="region"></dd></div></dl>
+      <div class="sf-actions"><button type="button" class="sf-secondary" data-sf-reset>Start over</button><a class="sf-primary" href="{{ site.data.site.download }}">Visit real download page ↗</a></div>
+    </section>
+    <div class="sf-actions" data-sf-actions><button type="button" class="sf-secondary" data-sf-back hidden>Back</button><button type="button" class="sf-primary" data-sf-next>Continue</button></div>
+  </form>
+  <p class="sf-footnote">Independent research. Not investment advice.</p>
+</div>

@@ -1,29 +1,7 @@
-import { test as base, expect } from '@playwright/test';
+import { test, expect } from './site-fixture.mjs';
 import AxeBuilder from '@axe-core/playwright';
-import http from 'node:http';
-import { readFile, writeFile, stat, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
-
-const test = base.extend({
-  baseURL: async ({ siteURL }, use) => use(siteURL),
-  siteURL: [async ({}, use) => {
-    const root = path.resolve('_site');
-    const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.png': 'image/png' };
-    const server = http.createServer(async (req, res) => {
-      try {
-        let file = path.resolve(root, '.' + decodeURIComponent(new URL(req.url, 'http://local').pathname));
-        if (!file.startsWith(root + '/') && file !== root) throw new Error('Outside site');
-        if ((await stat(file)).isDirectory()) file = path.join(file, 'index.html');
-        const data = await readFile(file);
-        res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream' });
-        res.end(data);
-      } catch { res.writeHead(404); res.end('Not found'); }
-    });
-    await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-    await use(`http://127.0.0.1:${server.address().port}`);
-    await new Promise(resolve => server.close(resolve));
-  }, { scope: 'worker' }],
-});
 
 test('local assets, anchors, metadata, factual CTAs and production exclusions', async ({ page, request, baseURL }) => {
   const errors = [];
@@ -233,7 +211,8 @@ test('V2 assets, fonts, metadata, factual links and isolated branding', async ({
   }
   await expect(page.locator('link[rel=icon]')).toHaveAttribute('href', '/assets/images/version-2-favicon.svg');
   await expect(page.locator('link[rel=stylesheet]')).toHaveAttribute('href', '/assets/css/main.css');
-  await expect(page.locator('script[src]')).toHaveAttribute('src', '/assets/js/main.js');
+  await expect(page.locator('script[src="/assets/js/main.js"]')).toHaveCount(1);
+  await expect(page.locator('script[src="/assets/js/signup-flow.js"]')).toHaveCount(1);
   await expect(page.locator('.v2-guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
   await expect(page.locator('.v2-guarantee-scope')).toHaveText('This covers non-use of the app subscription, not investment performance or losses.');
   await expect(page.locator('.v2-footer')).toContainText('Investing involves risk, including loss of capital.');
@@ -477,7 +456,8 @@ test('V3 exact motto, owned metadata, local assets, comparison links and unchang
   }
   await expect(page.locator('link[rel=icon]')).toHaveAttribute('href', '/assets/images/version-3-favicon.svg');
   await expect(page.locator('link[rel=stylesheet]')).toHaveAttribute('href', '/assets/css/main.css');
-  await expect(page.locator('script[src]')).toHaveAttribute('src', '/assets/js/main.js');
+  await expect(page.locator('script[src="/assets/js/main.js"]')).toHaveCount(1);
+  await expect(page.locator('script[src="/assets/js/signup-flow.js"]')).toHaveCount(1);
   expect(await page.locator('link[rel=preload][as=font]').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')))).toEqual([
     '/assets/fonts/manrope-latin.woff2', '/assets/fonts/instrument-serif-italic-latin.woff2',
   ]);
@@ -685,7 +665,8 @@ test('V4 independent identity, factual boundaries, local assets and metadata', a
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f5f7fa');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://istocklens.com/assets/images/version-4-social.png');
   await expect(page.locator('link[rel=icon]')).toHaveAttribute('href', '/assets/images/version-4-favicon.svg');
-  await expect(page.locator('script[src]')).toHaveAttribute('src', '/assets/js/version-4.js');
+  await expect(page.locator('script[src="/assets/js/version-4.js"]')).toHaveCount(1);
+  await expect(page.locator('script[src="/assets/js/signup-flow.js"]')).toHaveCount(1);
   await expect(page.locator('.v4-guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
   await expect(page.locator('.v4-guarantee-scope')).toContainText('not investment performance or losses');
   await expect(page.locator('.v4-note-bottom')).toContainText('not an app screenshot or a current assessment');
@@ -854,7 +835,7 @@ test('V4 keyboard research, navigation, short-screen menu and FAQs', async ({ pa
   await expect(nav).not.toBeVisible();
   await menu.click();
   await expect(menu).toHaveAttribute('aria-expanded', 'true');
-  const cta = nav.getByRole('link', { name: /Open the app/ });
+  const cta = nav.getByRole('link', { name: /Get iStockLens/ });
   await cta.scrollIntoViewIfNeeded();
   const box = await cta.boundingBox();
   expect(box.y + box.height).toBeLessThanOrEqual(321);

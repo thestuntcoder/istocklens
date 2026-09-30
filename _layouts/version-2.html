@@ -26,11 +26,13 @@
   <link rel="preload" href="{{ '/assets/fonts/manrope-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/signup-flow.js' | relative_url }}" defer></script>
 </head>
 <body class="version-2">
   <a class="v2-skip" href="#main">Skip to content</a>
   {% include version-2/header.html %}
   <main id="main" tabindex="-1">{{ content }}</main>
   {% include version-2/footer.html %}
+  {% include signup-dialog.html variant=2 %}
 </body>
 </html>
