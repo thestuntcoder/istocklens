@@ -666,3 +666,219 @@ test('V3 no-JavaScript navigation, all panels, native FAQ and reduced motion', a
     await context.close();
   }
 });
+
+const v4 = '/version-4/';
+
+test('V4 independent identity, factual boundaries, local assets and metadata', async ({ page, request, baseURL }) => {
+  const errors = [];
+  const remote = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
+  page.on('request', request => { if (!request.url().startsWith(baseURL)) remote.push(request.url()); });
+  await page.goto(v4);
+  await page.evaluate(() => document.fonts.ready);
+  await expect(page).toHaveTitle('iStockLens — An idea is not evidence.');
+  await expect(page.locator('h1')).toHaveCount(1);
+  await expect(page.locator('h1')).toHaveText(/An idea is not evidence\.\s*Put it to the test\./);
+  await expect(page.locator('body')).toHaveClass(/version-4/);
+  await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', 'https://istocklens.com/version-4/');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f6f5f0');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://istocklens.com/assets/images/version-4-social.png');
+  await expect(page.locator('link[rel=icon]')).toHaveAttribute('href', '/assets/images/version-4-favicon.svg');
+  await expect(page.locator('script[src]')).toHaveAttribute('src', '/assets/js/version-4.js');
+  await expect(page.locator('.v4-guarantee-exact')).toHaveText('If you don’t use the app, you get 100% of your money back.');
+  await expect(page.locator('.v4-guarantee-scope')).toContainText('not investment performance or losses');
+  await expect(page.locator('.v4-note-bottom')).toContainText('not an app screenshot or a current assessment');
+  await expect(page.locator('.v4-ledger-note')).toContainText('not independently verified conclusions');
+  await expect(page.locator('.v4-disclosure')).toContainText('Investing involves risk, including loss of capital.');
+  expect(await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(246, 245, 240)');
+  expect(await page.locator('h1').evaluate(el => getComputedStyle(el).fontFamily)).toContain('Source Serif 4');
+  expect(await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily)).toContain('IBM Plex Sans');
+  for (const family of ['IBM Plex Sans', 'Source Serif 4']) {
+    expect(await page.evaluate(name => [...document.fonts].some(font => font.family === name && font.status === 'loaded'), family)).toBeTruthy();
+  }
+  expect(await page.evaluate(() => [...document.fonts].filter(font => font.status === 'loaded').map(font => font.family))).not.toContain('Instrument Serif');
+  const verified = new Set(['/stocks', '/stocks/aapl', '/download', '/privacy', '/terms', '/version-4/']);
+  const refs = await page.locator('[href], [src]').evaluateAll(nodes => nodes.flatMap(node => ['href', 'src'].filter(attr => node.hasAttribute(attr)).map(attr => node.getAttribute(attr))));
+  for (const ref of new Set(refs)) {
+    if (ref.startsWith('#')) expect(await page.locator(`[id="${ref.slice(1)}"]`).count(), ref).toBe(1);
+    else if (ref.startsWith('/')) expect((await request.get(baseURL + ref)).status(), ref).toBe(200);
+    else { expect(new URL(ref).origin).toBe('https://istocklens.com'); expect(verified.has(new URL(ref).pathname), ref).toBeTruthy(); }
+  }
+  for (const [file, family] of [['ibm-plex-sans-latin.woff2', 'IBM Plex Sans'], ['source-serif-4-latin.woff2', 'Source Serif 4']]) {
+    const font = await request.get(`/assets/fonts/${file}`);
+    expect((await font.body()).subarray(0, 4).toString(), family).toBe('wOF2');
+  }
+  for (const name of ['IBMPlexSans', 'SourceSerif4']) expect(await (await request.get(`/assets/fonts/${name}-OFL.txt`)).text()).toContain('SIL OPEN FONT LICENSE Version 1.1');
+  const png = await (await request.get('/assets/images/version-4-social.png')).body();
+  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
+  const versions = page.getByRole('navigation', { name: 'Compare designs' });
+  for (const number of [1, 2, 3, 4]) await expect(versions.getByRole('link', { name: `Version ${number}`, exact: true })).toHaveAttribute('href', `/version-${number}/`);
+  await expect(versions.getByRole('link', { name: 'Version 4', exact: true })).toHaveAttribute('aria-current', 'page');
+  expect(errors).toEqual([]);
+  expect(remote).toEqual([]);
+});
+
+test('V4 responsive notebook and ledger fit all research states', async ({ page }) => {
+  for (const width of [320, 390, 768, 1024, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(v4);
+    await page.evaluate(() => document.fonts.ready);
+    for (const tab of await page.getByRole('tab').all()) {
+      await tab.click();
+      await expect(page.getByRole('tabpanel')).toHaveCount(1);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `overflow at ${width}px`).toBeTruthy();
+      const notebook = await page.locator('.v4-notebook').boundingBox();
+      const panel = await page.getByRole('tabpanel').boundingBox();
+      expect(panel.x).toBeGreaterThanOrEqual(notebook.x);
+      expect(panel.x + panel.width).toBeLessThanOrEqual(notebook.x + notebook.width + 1);
+    }
+    await page.getByRole('tab', { name: /The readout/ }).click();
+    await expect(page.locator('.v4-ledger tbody th')).toHaveText(['Growth', 'Profitability', 'Cash', 'Valuation', 'Stability']);
+    await expect(page.locator('.v4-data-score')).toHaveText(['65', '90', '90', '49', '75']);
+    const ledger = await page.locator('.v4-ledger').boundingBox();
+    expect(ledger.x).toBeGreaterThan(0);
+    expect(ledger.x + ledger.width).toBeLessThan(width);
+    expect(await page.locator('.v4-ledger').evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBeTruthy();
+    if (process.env.SCREENSHOTS) {
+      await mkdir('tmp/version-4', { recursive: true });
+      await page.evaluate(() => { document.activeElement.blur(); window.scrollTo({ top: 0, behavior: 'instant' }); });
+      await page.screenshot({ path: `tmp/version-4/page-${width}.png`, fullPage: true });
+    }
+  }
+});
+
+test('V4 keyboard research, navigation, short-screen menu and FAQs', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(v4);
+  const tabs = page.getByRole('tab');
+  await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+  await tabs.nth(1).focus();
+  for (const [key, index] of [['ArrowRight', 2], ['ArrowRight', 0], ['End', 2], ['Home', 0], ['ArrowLeft', 2]]) {
+    await page.keyboard.press(key);
+    await expect(tabs.nth(index)).toBeFocused();
+    await expect(tabs.nth(index)).toHaveAttribute('aria-selected', 'true');
+    expect(await tabs.evaluateAll(nodes => nodes.filter(node => node.tabIndex === 0).length)).toBe(1);
+    await expect(page.getByRole('tabpanel')).toHaveCount(1);
+    expect(await tabs.nth(index).evaluate(el => getComputedStyle(el).outlineStyle)).toBe('solid');
+  }
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('tabpanel')).toBeFocused();
+  await expect(page.getByRole('tabpanel')).toContainText('These are checks for you to perform.');
+  await page.setViewportSize({ width: 390, height: 320 });
+  const menu = page.getByRole('button', { name: 'Menu' });
+  const nav = page.getByRole('navigation', { name: 'Main navigation' });
+  await expect(nav).not.toBeVisible();
+  await menu.click();
+  await expect(menu).toHaveAttribute('aria-expanded', 'true');
+  const cta = nav.getByRole('link', { name: /Open the app/ });
+  await cta.scrollIntoViewIfNeeded();
+  const box = await cta.boundingBox();
+  expect(box.y + box.height).toBeLessThanOrEqual(321);
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeFocused();
+  await expect(nav).not.toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const [label, id] of [['Our approach', 'approach'], ['Research example', 'research-example'], ['What to verify', 'verification']]) {
+    await menu.click();
+    await nav.getByRole('link', { name: label, exact: true }).click();
+    await expect(nav).not.toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`#${id}$`));
+    const section = await page.locator(`#${id}`).boundingBox();
+    expect(section.y).toBeGreaterThanOrEqual(69);
+  }
+  await menu.click();
+  await page.locator('.v4-questions').click({ position: { x: 10, y: 350 } });
+  await expect(nav).not.toBeVisible();
+  await expect(page.locator('summary')).toHaveCount(4);
+  for (const summary of await page.locator('summary').all()) {
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    await expect(summary.locator('..')).toHaveAttribute('open', '');
+    await page.keyboard.press('Space');
+    await expect(summary.locator('..')).not.toHaveAttribute('open');
+  }
+  await page.goto(v4);
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('main')).toBeFocused();
+});
+
+test('V4 reflection checklist and actual downloadable worksheet do not certify investments', async ({ page, request }) => {
+  await page.goto(v4);
+  const boxes = page.getByRole('checkbox');
+  await expect(boxes).toHaveCount(3);
+  const progress = page.locator('[data-v4-progress]');
+  await expect(progress).toHaveText('0 of 3 questions considered.');
+  for (let i = 0; i < 3; i++) {
+    await boxes.nth(i).check();
+    await expect(progress).toHaveText(`${i + 1} of 3 questions considered.${i === 2 ? ' Keep verifying.' : ''}`);
+  }
+  await boxes.first().uncheck();
+  await expect(progress).toHaveText('2 of 3 questions considered.');
+  await expect(page.locator('.v4-checklist-card')).toContainText('does not verify a claim or make an investment safe');
+  const link = page.getByRole('link', { name: /Download the research checklist/ });
+  await expect(link).toHaveAttribute('download', '');
+  await expect(link).toHaveAttribute('href', '/assets/resources/independent-research-checklist.txt');
+  const response = await request.get('/assets/resources/independent-research-checklist.txt');
+  expect(response.status()).toBe(200);
+  const body = await response.text();
+  expect(body).toContain('THE INDEPENDENT INVESTOR\'S RESEARCH CHECKLIST');
+  expect(body).toContain('does not certify an investment as safe or suitable');
+  const downloadPromise = page.waitForEvent('download');
+  await link.click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('independent-research-checklist.txt');
+  expect(await readFile(await download.path(), 'utf8')).toBe(body);
+  await page.reload();
+  await expect(progress).toHaveText('0 of 3 questions considered.');
+  expect(await page.evaluate(() => localStorage.length)).toBe(0);
+});
+
+test('V4 axe accessibility across notebook, reflection, FAQ and menu states', async ({ page }) => {
+  test.setTimeout(60000);
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(v4);
+    await page.evaluate(() => document.fonts.ready);
+    for (const tab of await page.getByRole('tab').all()) {
+      await tab.click();
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+      expect(results.violations).toEqual([]);
+    }
+    for (const checkbox of await page.getByRole('checkbox').all()) await checkbox.check();
+    for (const summary of await page.locator('summary').all()) await summary.click();
+    if (width < 960) await page.getByRole('button', { name: 'Menu' }).click();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    expect(results.violations).toEqual([]);
+  }
+});
+
+test('V4 useful no-JS research, controls and reduced-motion fallback', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  try {
+    await page.goto(baseURL + v4);
+    await page.evaluate(() => document.fonts.ready);
+    for (const width of [320, 390, 768, 1024, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Menu' })).not.toBeVisible();
+      await expect(page.locator('[data-v4-tablist]')).not.toBeVisible();
+      await expect(page.locator('[data-v4-panel]:visible')).toHaveCount(3);
+      await expect(page.locator('[data-v4-progress]')).not.toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `no JS at ${width}`).toBeTruthy();
+      expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto');
+    }
+    await page.getByRole('checkbox').first().check();
+    await expect(page.getByRole('checkbox').first()).toBeChecked();
+    await page.locator('summary').first().focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('details').first()).toHaveAttribute('open', '');
+    await expect(page.getByRole('link', { name: /Download the research checklist/ })).toHaveAttribute('download', '');
+    await page.getByRole('link', { name: /Inspect a sample/ }).click();
+    await expect(page).toHaveURL(/#research-example$/);
+  } finally { await context.close(); }
+});

@@ -111,10 +111,10 @@ body.version-4 {
 .v4-below-note > span { color: #9e4d2e; margin-right: 6px; }
 .v4-approach { border-top: 1px solid #d8d9cf; background: #fffefa; }
 .v4-approach-grid { column-gap: 110px; }
-.v4-section-heading > .v4-mono { color: #737367; margin-bottom: 24px; }
+.v4-section-heading > .v4-mono { color: #64685f; margin-bottom: 24px; }
 .v4-section-heading h2, .v4-boundary-heading h2, .v4-closing h2 { font-family: var(--v4-serif); font-weight: 400; font-size: clamp(35px, 3.5vw, 48px); line-height: 1.18; letter-spacing: -1.2px; }
 .v4-section-heading > p:not(.v4-mono):not(.v4-download-note) { font-size: 16px; line-height: 1.8; color: #64685f; max-width: 405px; margin-top: 22px; }
-.v4-proof-mark { font-family: var(--v4-serif); font-size: 100px; font-weight: 400; color: #d1c5b4; letter-spacing: 2px; display: block; margin-top: 34px; line-height: 1; }
+.v4-proof-mark { font-family: var(--v4-serif); font-size: 100px; font-weight: 400; color: #968674; letter-spacing: 2px; display: block; margin-top: 34px; line-height: 1; }
 .v4-principles { border-top: 1px solid #bfc3b7; }
 .v4-principles article { display: flex; gap: 25px; padding: 26px 0; border-bottom: 1px solid #d8d9cf; }
 .v4-principle-no { font-family: var(--v4-serif); font-size: 24px; color: #9e4d2e; line-height: 1.2; }

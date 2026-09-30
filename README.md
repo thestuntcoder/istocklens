@@ -96,11 +96,12 @@ npm run check                   # production build + workflow tests + browser te
 npm run build                   # production CSS and site only
 npm run test:workflow            # port validation / selection / non-destructive conflict tests
 npm run test:browser             # browser regression tests against an existing production build
+npm run test:browser -- --workers=1  # serial mode for stable axe checks on busy machines
 bundle exec jekyll doctor
-SCREENSHOTS=1 npm run check      # captures in tmp/screenshots/, tmp/version-2/ and tmp/version-3/
+SCREENSHOTS=1 npm run check      # captures in tmp/screenshots/ and tmp/version-{2,3,4}/
 ```
 
-Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **34 Chromium tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Axe WCAG A/AA checks cover all three designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
+Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **40 Chromium tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Six V4 tests cover its independent identity, local fonts/artwork, all research states at six widths, keyboard/menu/native FAQ behavior, truthful checklist progress, real worksheet download, reduced motion and no-JS rendering. Axe WCAG A/AA checks cover all four designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
 
 If the bundled browser cannot be installed, use an installed Chrome with `CHROME_CHANNEL=chrome npm run check`. Failures are explicit, not silently skipped; ignored `test-results/` contains screenshots and traces (`npx playwright show-trace <trace.zip>`). If no browser tooling is available, run build, workflow tests and doctor separately, then use the following manual fallback at the printed dev URL and record that limitation:
 
@@ -116,7 +117,7 @@ If the bundled browser cannot be installed, use an installed Chrome with `CHROME
 - With dev running, temporarily add a Tailwind utility to `index.html`, save, and confirm both CSS and the browser update without manual refresh. Restore the edit; leave idle for several seconds and confirm `jekyll.log` does not repeatedly regenerate. Saving files under `docs/` or `tmp/` must not rebuild.
 - With two harmless local listeners occupying the preferred ports, confirm dev chooses different ports. Explicit occupied overrides must fail. Stop with Ctrl+C, verify both owned children exit, then restart. Never use the protected project’s processes as test targets.
 
-Actual verification and handoff details are recorded in `docs/development-verification.md`. Screenshots, logs and traces belong only in ignored paths.
+Actual verification and handoff details are recorded in `docs/development-verification.md`; the latest V4 checks and preview handoff are in `docs/version-4-design.md`. Screenshots, logs and traces belong only in ignored paths.
 
 ## Publishing requirements — owner confirmation required
 
@@ -136,5 +137,7 @@ Actual verification and handoff details are recorded in `docs/development-verifi
 - `1ddc598` — Preserve the original landing page as version-1.
 - `c25d7d8` — Implement and validate the distinct version-2 landing page.
 - Final V2 polish — keep the research CTA and guarantee above the desktop fold, with regression coverage.
+- `b73ad0a` — Add the blue editorial version-3 with the original motto.
+- `cf8ad9c` — Create an independent research-journal version-4 for analytical investors.
 
 See `git log --oneline` for the full commit history and `docs/development-verification.md` for verification details.

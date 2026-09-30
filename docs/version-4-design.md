@@ -36,3 +36,12 @@ Actual CSS remains locally compiled Tailwind, with utility-based responsive layo
 Inspect 320/390/768/1024/1440/1920px, all research views, menu behavior, checkbox/progress state, real download contents, no-JS/reduced-motion and axe accessibility. Run existing regressions to protect previous variants. Restore the managed live-reload preview after production verification. Commercial and legal publishing gates in README remain unchanged.
 
 Guidance used: UI workflow fresh-direction implementation; copywriting skill for audience fit, specificity and honest persuasion. No new third-party skills, frameworks or runtime dependencies.
+
+## Final verification — 2026-09-30
+- Production build, **3 workflow tests + 40 Chromium tests**, and Jekyll doctor passed. All 34 previous browser tests remain unchanged and pass.
+- Six new V4 tests cover local fonts/assets/metadata and real destinations; all notebook views at 320/390/768/1024/1440/1920px; keyboard tabs, sticky anchors, short-screen menu and native FAQs; checkbox progress and real file download; axe across all panels and expanded/checked controls; no-JS and reduced-motion fallbacks.
+- Fixed the two contrast findings: section labels on limestone and the oversized question-mark motif. Final axe WCAG A/AA checks report no violations in covered states; this is not an accessibility certification.
+- Read desktop full-page, phone hero and social artwork screenshots; other viewport captures are in ignored `tmp/version-4/`. No horizontal overflow detected at any checked width.
+- V4 loads only local runtime assets. Worksheet downloads match the actual static file and retain the no-certification disclaimer. Checked state is not persisted or transmitted.
+- Preview restored at **http://127.0.0.1:4001/version-4/**, LiveReload **35730**. Homepage and all four version routes, V4 JS/CSS/social image/worksheet and the LiveReload script return HTTP 200. Managed launcher **856**, Jekyll **863** at handoff; confirm process identity before stopping because PIDs can become stale. Logs: `tmp/dev/launcher.log`.
+- No changes to previous variant templates, data, behavior or style sources. The only shared presentation edit adds V4's CSS import and explicit Tailwind source path. No new packages or commercial promises.
