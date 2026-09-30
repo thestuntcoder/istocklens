@@ -1,7 +1,7 @@
 # Product Marketing Context
 
-**Document version:** v1
-**Last updated:** 2026-09-29
+**Document version:** v1.1
+**Last updated:** 2026-09-30
 
 ## Product overview — verified
 Investor research application. Reports separate business quality from valuation, using quantitative ratings and automatically generated summaries. Tools include Growth, Profitability, Cash/Financial Strength, Valuation and Stability scores, price action, valuation zones, analyst consensus/targets, news price drivers, market themes, watchlists and bullish/neutral/bearish thesis journals. Research only: not advice, brokerage or trade execution.
@@ -29,4 +29,5 @@ Primary conversion: verified https://istocklens.com/download. Allowed labels Get
 Owner confirmation of guarantee process/eligibility, commercial terms, legal copy, deployment canonical and supported coverage. No new commercial promises until verified.
 
 ## Changelog
+- v1.1 (2026-09-30) — Record the user's non-editorial V4 direction. Verified product facts and commercial constraints are unchanged.
 - v1 (2026-09-29) — Initial context from task-supplied verified public research and explicit messaging constraints.

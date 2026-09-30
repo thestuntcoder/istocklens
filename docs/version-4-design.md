@@ -39,3 +39,11 @@ All runtime fonts/CSS/JS are local. The worksheet remains `assets/resources/inde
 
 ## Review gates
 Inspect 320/390/768/1024/1440/1920px, all tabs, menu, anchors, checklist/download, no-JS and reduced motion. Test the new headline, neutral palette, sans-serif headings, primary CTA and desktop side-by-side data placement. Run all existing regressions and axe states. Restore the managed LiveReload preview after production validation; never touch another project's 4000/35729 listeners.
+
+## Refinement verification — 2026-09-30
+- Production build, **3 workflow tests + 40 Chromium tests**, and Jekyll doctor passed after this revision. All 34 earlier-variant browser tests remain unchanged and pass.
+- Axe WCAG A/AA checks report no violations in the tested default/expanded states. All three V4 tabs fit at 320/390/768/1024/1440/1920px; desktop research panels are beside the heading and near the top of the page.
+- Reviewed desktop hero/full page, phone hero and matching social artwork. Full-page desktop height is about 3,633px versus 4,495px for the former journal design. Review captures are in ignored `tmp/version-4/workspace-*.png`.
+- The real worksheet download, reflected checkbox count, keyboard controls, no-JS content and reduced-motion behavior still pass. V4 loads IBM Plex Sans only; no Source Serif 4 or Instrument Serif.
+- Preview restored at **http://127.0.0.1:4001/version-4/**, LiveReload **35730**. Root, all four version routes and the LiveReload script returned HTTP 200. Chrome confirmed the fresh workspace heading and interface.
+- Managed launcher **16652**, Jekyll **16662** at handoff; verify identity before stopping stale PIDs. Logs: `tmp/dev/launcher.log` and `tmp/version-4/workspace-check.log`. Other projects' listeners were not touched.
