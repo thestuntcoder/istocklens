@@ -1,6 +1,6 @@
 # iStockLens landing page
 
-Two responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
+Three responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative, and V3 combines editorial warmth with stronger typography and a blue-led palette. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
 
 ## Compare the designs
 
@@ -10,7 +10,9 @@ At the preferred preview address (use the actual URL printed by the launcher):
 - **Version 1:** http://127.0.0.1:4001/version-1/ — the same original content and appearance.
 - **Version 2:** http://127.0.0.1:4001/version-2/ — navy/cobalt, condensed bold typography, research-terminal artwork, ruled grids and a rectangular money-back stamp.
 
-Only V2 has the discreet version switcher. Both variants share verified data, compiled CSS and progressive-enhancement JavaScript; V2 styling is isolated with `body.version-2` or `v2-` component classes.
+- **Version 3:** http://127.0.0.1:4001/version-3/ — “Before you buy, know why,” with pale-blue surfaces, bold navy type, blue serif accents and a crisp white research card.
+
+V2 and V3 have discreet version switchers; V3 links to all three designs. All variants share verified data, compiled CSS and progressive-enhancement JavaScript. Alternative styling is scoped by body class or prefixed component classes.
 
 ## Prerequisites and install
 
@@ -58,7 +60,10 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 ## Content map
 
 - `index.html` and `version-1/index.html`: original routes, both including `_includes/version-1-content.html`.
-- `_includes/version-1-content.html`: unchanged original page argument, section layout and interactive sample panels.
+- `_includes/version-1-content.html`: shared original/V3 page argument and interactive sample panels. An optional `hero_report` include parameter selects V3 artwork; original routes retain their original artwork and rendered content.
+- `version-3/index.html`, `_layouts/version-3.html`, `_includes/version-3/`: V3 route, metadata, navigation, artwork and footer.
+- `_styles/version-3.css`: isolated blue editorial overrides and responsive artwork styles, using the existing self-hosted Manrope and Instrument Serif fonts.
+- `assets/images/version-3-{favicon,social}.svg` and `version-3-social.png`: V3 branding and social assets.
 - `version-2/index.html`: alternative page composition, benefits, process, guarantee and FAQs.
 - `_layouts/version-2.html`: V2 metadata and shell; loads the same local CSS/JS as V1.
 - `_includes/version-2/`: dedicated header, footer, research-brief artwork and interactive sample.

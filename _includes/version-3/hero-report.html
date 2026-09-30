@@ -1,0 +1,13 @@
+<div class="v3-art" role="group" aria-label="Illustrative Apple report, not live data. Strong business quality, Pricey valuation.">
+  <div class="v3-art-orbit" aria-hidden="true"></div>
+  <div class="v3-art-top flex items-center justify-between"><span>A CLEARER VIEW OF YOUR NEXT IDEA</span><span aria-hidden="true">↗</span></div>
+  <div class="v3-brief">
+    <div class="v3-brief-bar flex items-center justify-between"><span class="flex items-center gap-2"><span class="v3-square" aria-hidden="true"></span> THE RESEARCH BRIEF</span><span>01 / AAPL</span></div>
+    <div class="v3-company flex items-center gap-4"><div class="v3-monogram" aria-hidden="true">A<span>↗</span></div><div><h2>{{ site.data.sample.company }}</h2><p>{{ site.data.sample.ticker }} <span>/</span> Company snapshot</p></div><span class="v3-company-star" aria-hidden="true">✳</span></div>
+    <div class="v3-verdicts grid grid-cols-2 gap-3"><div><span>Business quality</span><strong>{{ site.data.sample.quality }} <span aria-hidden="true">↗</span></strong></div><div><span>Valuation</span><strong>{{ site.data.sample.valuation }} <span aria-hidden="true">≠</span></strong></div></div>
+    <div class="v3-plot"><div class="flex items-center justify-between gap-3"><span>The quality–value gap</span><small>Conceptual view</small></div><svg viewBox="0 0 360 115" role="img" aria-label="Conceptual illustration of the difference between business quality and price. Not historical market data."><path d="M0 22h360M0 55h360M0 88h360" stroke="#dce5f3" stroke-dasharray="3 5"/><path d="M0 94 25 86 45 89 66 68 88 72 110 55 130 66 154 41 178 46 199 29 220 41 241 27 267 34 285 18 310 24 336 14 357 20" fill="none" stroke="#285be2" stroke-width="3" stroke-linejoin="round"/><path d="M0 91 40 87 80 80 120 84 160 76 200 80 240 69 280 73 320 65 357 69" fill="none" stroke="#7f98bf" stroke-width="2" stroke-dasharray="5 5"/><circle cx="357" cy="20" r="4" fill="#285be2"/></svg></div>
+    <div class="v3-brief-scores grid grid-cols-3 gap-4">{% for score in site.data.sample.scores limit:3 %}<div><div class="flex justify-between gap-2"><span>{{ score.name }}</span><strong>{{ score.value }}</strong></div><div class="v3-score-line" aria-hidden="true"><span style="width: {{ score.value }}%"></span></div></div>{% endfor %}</div>
+    <p class="v3-brief-disclaimer">Illustrative report · not live data</p>
+  </div>
+  <div class="v3-art-bottom flex items-center justify-between gap-4"><p>Great business.<br><strong>But at what price?</strong></p><div class="v3-quality-badge">Quality <span>≠</span> value</div></div>
+</div>

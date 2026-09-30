@@ -7,7 +7,7 @@
       <div class="hero-actions flex flex-wrap items-center gap-3"><a class="button button-lime" href="{{ site.data.site.download }}">Start your research {% include arrow.html %}</a><a class="button button-outline" href="#sample">Explore a sample <span aria-hidden="true">↓</span></a></div>
       <a href="#guarantee" class="hero-guarantee inline-flex items-center gap-2.5">{% include shield.html %}<span>Don’t use the app? 100% money back.</span></a>
     </div>
-    {% include hero-report.html %}
+    {% assign hero_partial = include.hero_report | default: 'hero-report.html' %}{% include {{ hero_partial }} %}
   </div>
   <div class="mechanism flex flex-wrap items-center justify-between gap-4" role="group" aria-label="Research approach"><span class="mechanism-intro">A little structure. A clearer perspective.</span><div class="flex flex-wrap items-center gap-x-7 gap-y-3"><span><i aria-hidden="true">01</i> The business</span><span><i aria-hidden="true">02</i> The price</span><span><i aria-hidden="true">03</i> The risks</span><span class="mechanism-final">Your decision <span aria-hidden="true">↗</span></span></div></div>
 </section>
