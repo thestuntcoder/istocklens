@@ -677,12 +677,12 @@ test('V4 independent identity, factual boundaries, local assets and metadata', a
   page.on('request', request => { if (!request.url().startsWith(baseURL)) remote.push(request.url()); });
   await page.goto(v4);
   await page.evaluate(() => document.fonts.ready);
-  await expect(page).toHaveTitle('iStockLens — An idea is not evidence.');
+  await expect(page).toHaveTitle('iStockLens — Research the stock. Challenge the thesis.');
   await expect(page.locator('h1')).toHaveCount(1);
-  await expect(page.locator('h1')).toHaveText(/An idea is not evidence\.\s*Put it to the test\./);
+  await expect(page.locator('h1')).toHaveText(/Research the stock\.\s*Challenge the thesis\./);
   await expect(page.locator('body')).toHaveClass(/version-4/);
   await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', 'https://istocklens.com/version-4/');
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f6f5f0');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f5f7fa');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://istocklens.com/assets/images/version-4-social.png');
   await expect(page.locator('link[rel=icon]')).toHaveAttribute('href', '/assets/images/version-4-favicon.svg');
   await expect(page.locator('script[src]')).toHaveAttribute('src', '/assets/js/version-4.js');
@@ -691,13 +691,15 @@ test('V4 independent identity, factual boundaries, local assets and metadata', a
   await expect(page.locator('.v4-note-bottom')).toContainText('not an app screenshot or a current assessment');
   await expect(page.locator('.v4-ledger-note')).toContainText('not independently verified conclusions');
   await expect(page.locator('.v4-disclosure')).toContainText('Investing involves risk, including loss of capital.');
-  expect(await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(246, 245, 240)');
-  expect(await page.locator('h1').evaluate(el => getComputedStyle(el).fontFamily)).toContain('Source Serif 4');
+  expect(await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor)).toBe('rgb(245, 247, 250)');
+  for (const heading of await page.locator('h1, h2, h3, h4').all()) expect(await heading.evaluate(el => getComputedStyle(el).fontFamily)).toContain('IBM Plex Sans');
+  expect(await page.locator('h1').evaluate(el => Number(getComputedStyle(el).fontWeight))).toBeGreaterThanOrEqual(600);
   expect(await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily)).toContain('IBM Plex Sans');
-  for (const family of ['IBM Plex Sans', 'Source Serif 4']) {
-    expect(await page.evaluate(name => [...document.fonts].some(font => font.family === name && font.status === 'loaded'), family)).toBeTruthy();
-  }
-  expect(await page.evaluate(() => [...document.fonts].filter(font => font.status === 'loaded').map(font => font.family))).not.toContain('Instrument Serif');
+  expect(await page.evaluate(() => [...document.fonts].some(font => font.family === 'IBM Plex Sans' && font.status === 'loaded'))).toBeTruthy();
+  const loadedFonts = await page.evaluate(() => [...document.fonts].filter(font => font.status === 'loaded').map(font => font.family));
+  expect(loadedFonts).not.toContain('Instrument Serif');
+  expect(loadedFonts).not.toContain('Source Serif 4');
+  await expect(page.locator('.v4-intro .v4-button')).toHaveAttribute('href', 'https://istocklens.com/download');
   const verified = new Set(['/stocks', '/stocks/aapl', '/download', '/privacy', '/terms', '/version-4/']);
   const refs = await page.locator('[href], [src]').evaluateAll(nodes => nodes.flatMap(node => ['href', 'src'].filter(attr => node.hasAttribute(attr)).map(attr => node.getAttribute(attr))));
   for (const ref of new Set(refs)) {
@@ -705,7 +707,7 @@ test('V4 independent identity, factual boundaries, local assets and metadata', a
     else if (ref.startsWith('/')) expect((await request.get(baseURL + ref)).status(), ref).toBe(200);
     else { expect(new URL(ref).origin).toBe('https://istocklens.com'); expect(verified.has(new URL(ref).pathname), ref).toBeTruthy(); }
   }
-  for (const [file, family] of [['ibm-plex-sans-latin.woff2', 'IBM Plex Sans'], ['source-serif-4-latin.woff2', 'Source Serif 4']]) {
+  for (const [file, family] of [['ibm-plex-sans-latin.woff2', 'IBM Plex Sans']]) {
     const font = await request.get(`/assets/fonts/${file}`);
     expect((await font.body()).subarray(0, 4).toString(), family).toBe('wOF2');
   }
@@ -736,6 +738,15 @@ test('V4 responsive notebook and ledger fit all research states', async ({ page 
     await page.getByRole('tab', { name: /The readout/ }).click();
     await expect(page.locator('.v4-ledger tbody th')).toHaveText(['Growth', 'Profitability', 'Cash', 'Valuation', 'Stability']);
     await expect(page.locator('.v4-data-score')).toHaveText(['65', '90', '90', '49', '75']);
+    if (width >= 960) {
+      const intro = await page.locator('.v4-intro').boundingBox();
+      const example = await page.locator('.v4-example').boundingBox();
+      expect(intro.x + intro.width).toBeLessThan(example.x);
+      expect(example.y).toBeLessThan(180);
+      expect((await page.locator('.v4-readout-summary').boundingBox()).y).toBeLessThan(420);
+    }
+    const tracks = page.locator('.v4-score-track > span');
+    expect(await tracks.evaluateAll(nodes => nodes.map(node => parseFloat(node.style.width)))).toEqual([65, 90, 90, 49, 75]);
     const ledger = await page.locator('.v4-ledger').boundingBox();
     expect(ledger.x).toBeGreaterThan(0);
     expect(ledger.x + ledger.width).toBeLessThan(width);

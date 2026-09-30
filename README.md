@@ -1,6 +1,6 @@
 # iStockLens landing page
 
-Four responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative, V3 combines editorial warmth with stronger blue typography, and V4 starts afresh as an independent research journal. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
+Four responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative, V3 combines editorial warmth with stronger blue typography, and V4 is a modern, product-led research workspace. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
 
 ## Compare the designs
 
@@ -12,7 +12,7 @@ At the preferred preview address (use the actual URL printed by the launcher):
 
 - **Version 3:** http://127.0.0.1:4001/version-3/ — “Before you buy, know why,” with pale-blue surfaces, bold navy type, blue serif accents and a crisp white research card.
 
-- **Version 4:** http://127.0.0.1:4001/version-4/ — a new paper/graphite/copper research journal: “An idea is not evidence. Put it to the test.” New typography, a research ledger, explicit limits and a downloadable validation worksheet.
+- **Version 4:** http://127.0.0.1:4001/version-4/ — “Research the stock. Challenge the thesis.” A product-led research workspace with bold sans-serif type, cool-gray/teal panels, interactive scores and a downloadable checklist. Revised after feedback that the first V4 was too editorial.
 
 V2 and V3 have discreet version switchers; V4's footer links to all four designs. Variants share the original verified product facts and locally compiled Tailwind CSS. V4 has its own content, layout, components and progressive-enhancement JavaScript. Alternative styling is scoped by body class or prefixed component classes.
 
@@ -86,7 +86,7 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 - `_config.yml`: title, description, canonical host and build exclusions.
 - `docs/ui-design-spec.md` and `.agents/product-marketing.md`: source-of-truth design and factual constraints.
 
-Fonts: Manrope variable 400–800 and Instrument Serif italic, Latin WOFF2 subsets from Google Fonts, self-hosted under `assets/fonts/` with their SIL Open Font License files. V2 adds **Barlow Condensed 800**, also a local Latin WOFF2 with `BarlowCondensed-OFL.txt`, and uses Manrope for supporting copy (no serif on V2). V4 uses new local **IBM Plex Sans 400–700** and **Source Serif 4 400–600** Latin WOFF2 fonts with their own SIL OFL files; it does not load the earlier variants' fonts. System fonts provide fallbacks. Each variant has original SVG social artwork with a PNG counterpart for crawler compatibility; the V2 SVG embeds its licensed heading font for standalone rendering.
+Fonts: Manrope variable 400–800 and Instrument Serif italic, Latin WOFF2 subsets from Google Fonts, self-hosted under `assets/fonts/` with their SIL Open Font License files. V2 adds **Barlow Condensed 800**, also a local Latin WOFF2 with `BarlowCondensed-OFL.txt`, and uses Manrope for supporting copy (no serif on V2). V4 uses local **IBM Plex Sans 400–700** throughout; no serif fonts are loaded. The previous V4's Source Serif 4 font/license remain archived as source assets, without a font-face or preload. Font licenses are included under `assets/fonts/`. System fonts provide fallbacks. Each variant has original SVG social artwork with a PNG counterpart for crawler compatibility; the V2 SVG embeds its licensed heading font for standalone rendering.
 
 ## Verify
 
@@ -101,7 +101,7 @@ bundle exec jekyll doctor
 SCREENSHOTS=1 npm run check      # captures in tmp/screenshots/ and tmp/version-{2,3,4}/
 ```
 
-Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **40 Chromium tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Six V4 tests cover its independent identity, local fonts/artwork, all research states at six widths, keyboard/menu/native FAQ behavior, truthful checklist progress, real worksheet download, reduced motion and no-JS rendering. Axe WCAG A/AA checks cover all four designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
+Browser tests serve `_site/` on OS-assigned loopback ports and close their own servers afterwards. **40 Chromium tests** retain the original 15 checks and 14 V1/V2 variant checks (including desktop above-the-fold CTA/guarantee visibility): root/V1 body/computed-style identity and screenshot equivalence at six widths; V2 local fonts/license, blue metadata/artwork, destinations, shared sample scores, vertical/horizontal keyboard tabs, menu/anchors, native FAQs, reduced motion and all-panel no-JS rendering. Responsive V2 checks cover 320, 390, 768, 1024, 1440 and 1920px, including fitted three-line headings and artwork bounds. Five focused V3 tests cover the exact motto, local metadata/assets, comparison links, unchanged guarantee and download CTAs, blue tokens and font weights, headline/art bounds at the same six widths, keyboard controls and no-JS fallback. V3 full-page and hero captures cover 320, 390 and 1440px. Six V4 tests cover its product-led identity, sans-serif typography, local fonts/artwork, side-by-side desktop hero and score bars, all research states at six widths, keyboard/menu/native FAQ behavior, truthful checklist progress, real worksheet download, reduced motion and no-JS rendering. Axe WCAG A/AA checks cover all four designs, all sample states and expanded controls. No test navigates to the original app; external destinations are compared against the supplied verified allowlist. Automated accessibility checks are not a full accessibility certification.
 
 If the bundled browser cannot be installed, use an installed Chrome with `CHROME_CHANNEL=chrome npm run check`. Failures are explicit, not silently skipped; ignored `test-results/` contains screenshots and traces (`npx playwright show-trace <trace.zip>`). If no browser tooling is available, run build, workflow tests and doctor separately, then use the following manual fallback at the printed dev URL and record that limitation:
 
@@ -138,6 +138,7 @@ Actual verification and handoff details are recorded in `docs/development-verifi
 - `c25d7d8` — Implement and validate the distinct version-2 landing page.
 - Final V2 polish — keep the research CTA and guarantee above the desktop fold, with regression coverage.
 - `b73ad0a` — Add the blue editorial version-3 with the original motto.
-- `cf8ad9c` — Create an independent research-journal version-4 for analytical investors.
+- `cf8ad9c` — Create the initial version-4 for analytical investors.
+- V4 workspace refinement — remove the editorial direction in favor of bold sans-serif typography, a split product hero and compact data-led panels.
 
 See `git log --oneline` for the full commit history and `docs/development-verification.md` for verification details.
