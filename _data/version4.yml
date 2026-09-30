@@ -1,0 +1,20 @@
+questions:
+  - dimension: Growth
+    question: Is the growth repeatable?
+  - dimension: Profitability
+    question: What supports the margins?
+  - dimension: Cash
+    question: Does cash support reported earnings?
+  - dimension: Valuation
+    question: What expectations are priced in?
+  - dimension: Stability
+    question: What could change the risk profile?
+faqs:
+  - question: Is a rating the same thing as evidence?
+    answer: "No. A rating is the output of a quantitative model, not an independently verified conclusion. Summaries are automatically generated. Use them to identify questions, then check material claims against company filings and other sources you trust."
+  - question: Does iStockLens replace my other research?
+    answer: "No—and it shouldn’t. iStockLens helps organize business quality, valuation and market context. Keep using primary documents, trusted analysis and your own judgment. This page does not claim automatic source verification or integrations with your research providers."
+  - question: Is the research example current?
+    answer: "No. The Apple example is an illustrative walkthrough, not a live quote, current assessment or recommendation. The questions beside the scores are prompts for your own research. They do not mean those checks have been completed."
+  - question: Will it tell me what I should buy?
+    answer: "iStockLens is a research tool, not a financial adviser or brokerage. It does not execute trades. A score cannot account for your full financial situation, time horizon or tolerance for loss. You make the decision—and investing can still result in a loss."

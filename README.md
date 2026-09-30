@@ -1,6 +1,6 @@
 # iStockLens landing page
 
-Three responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative, and V3 combines editorial warmth with stronger typography and a blue-led palette. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
+Four responsive landing-page variants built with **Jekyll 4.4** and **locally compiled Tailwind 4**. The original editorial design remains unchanged; V2 is an assertive blue research-brief alternative, V3 combines editorial warmth with stronger blue typography, and V4 starts afresh as an independent research journal. No Tailwind CDN, external font requests, browser framework, analytics, or forms. Product and commercial claims follow the supplied public research.
 
 ## Compare the designs
 
@@ -12,7 +12,9 @@ At the preferred preview address (use the actual URL printed by the launcher):
 
 - **Version 3:** http://127.0.0.1:4001/version-3/ — “Before you buy, know why,” with pale-blue surfaces, bold navy type, blue serif accents and a crisp white research card.
 
-V2 and V3 have discreet version switchers; V3 links to all three designs. All variants share verified data, compiled CSS and progressive-enhancement JavaScript. Alternative styling is scoped by body class or prefixed component classes.
+- **Version 4:** http://127.0.0.1:4001/version-4/ — a new paper/graphite/copper research journal: “An idea is not evidence. Put it to the test.” New typography, a research ledger, explicit limits and a downloadable validation worksheet.
+
+V2 and V3 have discreet version switchers; V4's footer links to all four designs. Variants share the original verified product facts and locally compiled Tailwind CSS. V4 has its own content, layout, components and progressive-enhancement JavaScript. Alternative styling is scoped by body class or prefixed component classes.
 
 ## Prerequisites and install
 
@@ -64,6 +66,11 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 - `version-3/index.html`, `_layouts/version-3.html`, `_includes/version-3/`: V3 route, metadata, navigation, artwork and footer.
 - `_styles/version-3.css`: isolated blue editorial overrides and responsive artwork styles, using the existing self-hosted Manrope and Instrument Serif fonts.
 - `assets/images/version-3-{favicon,social}.svg` and `version-3-social.png`: V3 branding and social assets.
+- `version-4/index.html`, `_layouts/version-4.html`, `_includes/version-4/`: independent V4 composition, research notebook, wordmark, navigation and footer.
+- `_styles/version-4.css`, `assets/js/version-4.js`, `_data/version4.yml`: isolated V4 styles, menu/research/checklist behavior, research questions and new FAQs.
+- `assets/resources/independent-research-checklist.txt`: downloadable plain-text worksheet; no email collection or automated claim validation.
+- `assets/images/version-4-{favicon,social}.svg` and `version-4-social.png`: V4 favicon and social artwork.
+- `docs/version-4-design.md`: new audience/visual direction, factual boundaries and validation notes.
 - `version-2/index.html`: alternative page composition, benefits, process, guarantee and FAQs.
 - `_layouts/version-2.html`: V2 metadata and shell; loads the same local CSS/JS as V1.
 - `_includes/version-2/`: dedicated header, footer, research-brief artwork and interactive sample.
@@ -79,7 +86,7 @@ Documentation, tests, npm dependencies, logs, `.pi`, temporary artifacts, Playwr
 - `_config.yml`: title, description, canonical host and build exclusions.
 - `docs/ui-design-spec.md` and `.agents/product-marketing.md`: source-of-truth design and factual constraints.
 
-Fonts: Manrope variable 400–800 and Instrument Serif italic, Latin WOFF2 subsets from Google Fonts, self-hosted under `assets/fonts/` with their SIL Open Font License files. V2 adds **Barlow Condensed 800**, also a local Latin WOFF2 with `BarlowCondensed-OFL.txt`, and uses Manrope for supporting copy (no serif on V2). System fonts provide fallbacks. Each variant has original SVG social artwork with a PNG counterpart for crawler compatibility; the V2 SVG embeds its licensed heading font for standalone rendering.
+Fonts: Manrope variable 400–800 and Instrument Serif italic, Latin WOFF2 subsets from Google Fonts, self-hosted under `assets/fonts/` with their SIL Open Font License files. V2 adds **Barlow Condensed 800**, also a local Latin WOFF2 with `BarlowCondensed-OFL.txt`, and uses Manrope for supporting copy (no serif on V2). V4 uses new local **IBM Plex Sans 400–700** and **Source Serif 4 400–600** Latin WOFF2 fonts with their own SIL OFL files; it does not load the earlier variants' fonts. System fonts provide fallbacks. Each variant has original SVG social artwork with a PNG counterpart for crawler compatibility; the V2 SVG embeds its licensed heading font for standalone rendering.
 
 ## Verify
 
